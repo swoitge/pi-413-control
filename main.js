@@ -1,8 +1,12 @@
 const fs = require('fs');
 const http = require('http');
 const WebSocket = require('ws');
+var rpio;
 
-const rpio = require('rpio');
+try {
+  rpio = require('rpio');
+}
+catch(e){}
 
 var pin = 12;           /* P12/GPIO18 */
 var range = 1024;       /* LEDs can quickly hit max brightness, so only use */
@@ -11,12 +15,14 @@ var clockdiv = 8;       /* Clock divider (PWM refresh rate), 8 == 2.4MHz */
 var interval = 5;       /* setInterval timer, speed of pulses */
 var times = 5;          /* How many times to pulse before exiting */
 
-rpio.open(pin, rpio.PWM);
-rpio.pwmSetClockDivider(clockdiv);
-rpio.pwmSetRange(pin, range);
+if(rpio) {
+  rpio.open(pin, rpio.PWM);
+  rpio.pwmSetClockDivider(clockdiv);
+  rpio.pwmSetRange(pin, range);
+  rpio.pwmSetData(pin, 80);
+}
 
-rpio.pwmSetData(pin, 80);
-const baseDir = "/home/pi/pi-413-constrol/html/";
+const baseDir = "./html/";
 
 /*jjjj*/
 const server = http.createServer(function (req, res) {
@@ -29,13 +35,21 @@ const server = http.createServer(function (req, res) {
     res.writeHead(200);
     res.end(data);
   });
-}).listen(8080);
+});
 
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
+    if(message && message.msg == "setServo") {
+      console.log('setServo: pin: %s', message.pin, message.value);
+      if(rpio) {
+        rpio.pwmSetData(pin, value);
+      }
+      else {
+        //console.log('setServo: pin: %s', message.pin, message.value);
+      }
+    }
   });
 
   ws.send('something');
