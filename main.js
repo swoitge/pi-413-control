@@ -67,7 +67,7 @@ const wss = new WebSocket.Server({ server });
 wss.on('connection', function connection(ws) {
   console.log("wss on connection");
   ws.on('message', function incoming(message) {
-    console.log("wss on message", message);
+    console.log("wss on message", JSON.stringify(message));
     if(message && message.msg == "setServoValue") {
       console.log('set servo value: pin: %s', message.value);
       if(Gpio) {
