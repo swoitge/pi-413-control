@@ -6,9 +6,9 @@ const mpu = require("./lib/mpu-access.js")
 var rpio, i2c, Gpio;
 
 try {
-  //rpio = require('rpio');
+  rpio = require('rpio');
   i2c = require('i2c-bus');
-  Gpio = require('pigpio').Gpio;
+  //Gpio = require('pigpio').Gpio;
 }
 catch(e){
   console.error(e);
