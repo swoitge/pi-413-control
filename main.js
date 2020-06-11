@@ -6,11 +6,13 @@ const mpu = require("./lib/mpu-access.js")
 var rpio, i2c, Gpio;
 
 try {
-  rpio = require('rpio');
+  //rpio = require('rpio');
   i2c = require('i2c-bus');
   Gpio = require('pigpio').Gpio;
 }
-catch(e){}
+catch(e){
+  console.error(e);
+}
 
 var pin = 12;           /* P12/GPIO18 */
 var range = 1024;       /* LEDs can quickly hit max brightness, so only use */
