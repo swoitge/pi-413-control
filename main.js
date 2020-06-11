@@ -17,7 +17,7 @@ catch(e){
 var pin = 12;           /* P12/GPIO18 */
 var range = 1024;       /* LEDs can quickly hit max brightness, so only use */
 var max = 131072;          /*   the bottom 8th of a larger scale */
-var clockdiv = 8;       /* Clock divider (PWM refresh rate), 8 == 2.4MHz */
+var clockdiv = 128;       /* Clock divider (PWM refresh rate), 8 == 2.4MHz */
 var interval = 5;       /* setInterval timer, speed of pulses */
 var times = 5;          /* How many times to pulse before exiting */
 
@@ -26,28 +26,28 @@ const MPU_ADDR = 0x68;
 const W_REG_TEMP = 0x41;
 
 
-/*if(rpio) {
+if(rpio) {
   rpio.open(pin, rpio.PWM);
   rpio.pwmSetClockDivider(clockdiv);
-  //rpio.pwmSetRange(pin, range);
+  rpio.pwmSetRange(pin, range);
   rpio.pwmSetData(pin, 80);
-}*/
+}
 
 var servo1;
 
-if(Gpio) {
+/*if(Gpio) {
   servo1 = new Gpio(18, {mode: Gpio.OUTPUT});
   servo1.servoWrite(1000);
-}
+}*/
 
-if(i2c) {
+/*if(i2c) {
   var i2c_inst = i2c.openSync(1);
   var rawData = mpu.readWord(i2c_inst, MPU_ADDR, W_REG_TEMP);
 
   //Temperature in degrees C = (TEMP_OUT Register Value as a signed quantity)/340 + 36.53
   var celsius = rawData / 340 + 36.53;
   console.log("current temperature", celsius);
-}
+}*/
 
 const baseDir = "./html/";
 
@@ -73,9 +73,9 @@ wss.on('connection', function (ws) {
     var msgObj = JSON.parse(message);
     if(msgObj && msgObj.msg == "setServoValue") {
       console.log('set servo value: pin: %s', msgObj.value);
-      if(Gpio) {
-        servo1.servoWrite(msgObj.value);
-        //rpio.pwmSetRange(message.pin, message.range);
+      if(rpio) {
+        //servo1.servoWrite(msgObj.value);
+        rpio.pwmSetData(12, msgObj.value);
       }
     }
   });
