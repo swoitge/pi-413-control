@@ -19,15 +19,15 @@ new Slider('#slider1', {
   min: 0,
   max: 2048,
   //range: true,
-  value: [100, 900]
+  value: 500
 }).on("slideStop", function(){console.log("on slideStop", arguments);});
 
 //pwm value
 new Slider('#slider2', {
   id:"slider-servo-2",
   tooltip: 'always',
-  min: 0,
-  max: 1024,
+  min: 500,
+  max: 2500,
   //range: true,
-  value: [100, 900]
+  value: 2000
 }).on("slideStop", function(){console.log("on slideStop", arguments);});
