@@ -31,8 +31,10 @@ const W_REG_TEMP = 0x41;
   rpio.pwmSetData(pin, 80);
 }*/
 
+var servo1;
+
 if(Gpio) {
-  var servo1 = new Gpio(18, {mode: Gpio.OUTPUT});
+  servo1 = new Gpio(18, {mode: Gpio.OUTPUT});
   servo1.servoWrite(1000);
 }
 
@@ -74,8 +76,9 @@ wss.on('connection', function connection(ws) {
 
     if(message && message.msg == "setServoRange") {
       console.log('set servo range: pin: %s', message.pin, message.range);
-      if(rpio) {
-        rpio.pwmSetRange(message.pin, message.range);
+      if(Gpio) {
+        servo1.servoWrite(message.range);
+        //rpio.pwmSetRange(message.pin, message.range);
       }
     }
   });

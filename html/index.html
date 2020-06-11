@@ -11,6 +11,10 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
+    <!-- slider -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.css" integrity="sha256-5eXyODM1D6wFj3P0ieYmcQmUTyb3DZjRRujoMwxPKr8=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.js" integrity="sha256-GFE08G5+A4XgJj8OZ0g+Px5iMXNhP+RyWGDfs0nHMm4=" crossorigin="anonymous"></script>
+
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -137,7 +141,11 @@
         </div>
       </div>
 
-      <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+      <div>
+        <h2>Servo 1</h2>
+        <input id="slider1" type="text" class="span2" value="" id="R" data-slider-handle="square" />
+        <input id="slider2" type="text" class="span2" value="" id="R" data-slider-handle="square" />
+      </div>
 
       <h2>Section title</h2>
       <div class="table-responsive">

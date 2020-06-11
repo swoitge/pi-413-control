@@ -1,8 +1,33 @@
 const socket = new WebSocket("ws://" + document.location.host);
 
 api = {};
+
 api.rpi = api.rpi || {};
 
-api.rpi.setServo = function(pin, value) {
-  socket.send({msg:"setServo", pin:pin, value:value});
+api.rpi.setServoValue = function(pin, value) {
+  socket.send({msg:"setServoValue", pin, value});
 }
+
+api.rpi.setServoRange = function(pin, range) {
+  socket.send({msg:"setServoRange", pin, range});
+}
+
+// pwm range
+new Slider('#slider1', {
+  id:"slider-servo-1",
+  tooltip: 'always',
+  min: 0,
+  max: 2048,
+  //range: true,
+  value: [100, 900]
+}).on("slideStop", function(){console.log("on slideStop", arguments);});
+
+//pwm value
+new Slider('#slider2', {
+  id:"slider-servo-2",
+  tooltip: 'always',
+  min: 0,
+  max: 1024,
+  //range: true,
+  value: [100, 900]
+}).on("slideStop", function(){console.log("on slideStop", arguments);});
