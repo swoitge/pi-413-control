@@ -68,14 +68,7 @@ wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
 
     if(message && message.msg == "setServoValue") {
-      console.log('set servo value: pin: %s', message.pin, message.value);
-      if(rpio) {
-        rpio.pwmSetData(message.pin, message.value);
-      }
-    }
-
-    if(message && message.msg == "setServoRange") {
-      console.log('set servo range: pin: %s', message.pin, message.range);
+      console.log('set servo value: pin: %s', message.value);
       if(Gpio) {
         servo1.servoWrite(message.range);
         //rpio.pwmSetRange(message.pin, message.range);

@@ -20,7 +20,10 @@ new Slider('#slider1', {
   max: 2048,
   //range: true,
   value: 500
-}).on("slideStop", function(){console.log("on slideStop", arguments);});
+}).on("slideStop", function(v){
+  console.log("on slideStop", arguments);
+  api.rpi.setServoRange(12, v);
+});
 
 //pwm value
 new Slider('#slider2', {
@@ -30,4 +33,7 @@ new Slider('#slider2', {
   max: 2500,
   //range: true,
   value: 2000
-}).on("slideStop", function(){console.log("on slideStop", arguments);});
+}).on("slideStop", function(v){
+  console.log("on slideStop", arguments);
+  api.rpi.setServoValue(12, v);
+});
