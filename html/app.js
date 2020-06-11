@@ -5,7 +5,7 @@ api = {};
 api.rpi = api.rpi || {};
 
 api.rpi.setServoValue = function(pin, value) {
-  socket.send({msg:"setServoValue", pin, value});
+  socket.send(JSON.stringify({msg:"setServoValue", pin, value}));
 }
 
 api.rpi.setServoRange = function(pin, range) {
