@@ -64,14 +64,15 @@ const server = http.createServer(function (req, res) {
 
 const wss = new WebSocket.Server({ server });
 
-wss.on('connection', function connection(ws) {
+wss.on('connection', function (ws) {
   console.log("wss on connection");
-  ws.on('message', function incoming(message) {
-    console.log("wss on message", JSON.stringify(message));
-    if(message && message.msg == "setServoValue") {
-      console.log('set servo value: pin: %s', message.value);
+  ws.on('message', function(message) {
+    console.log("wss on message", message);
+    var msgObj = JSON.parse(message);
+    if(msgObj && msgObj.msg == "setServoValue") {
+      console.log('set servo value: pin: %s', msgObj.value);
       if(Gpio) {
-        servo1.servoWrite(message.range);
+        servo1.servoWrite(msgObj.value);
         //rpio.pwmSetRange(message.pin, message.range);
       }
     }
