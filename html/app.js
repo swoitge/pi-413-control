@@ -30,7 +30,7 @@ new Slider('#slider2', {
   id:"slider-servo-2",
   tooltip: 'always',
   min: 70,
-  max: 300,
+  max: 400,
   //range: true,
   value: 2000
 }).on("slideStop", function(v){
