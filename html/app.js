@@ -5,6 +5,7 @@ api = {};
 api.rpi = api.rpi || {};
 
 var callbacks = {};
+var callbackCount = 0;
 
 api.rpi.setServoValue = function(pin, value) {
   console.log("set servo value", value);
@@ -12,8 +13,9 @@ api.rpi.setServoValue = function(pin, value) {
 }
 
 api.rpi.requestI2C = function(register, callback) {
+  var messageId = "msg_" + callbackCount++;
   socket.send(JSON.stringify({msg:"readI2C", register}));
-  callbacks.resultI2C = callback;
+  callbacks[messageId] = callback;
 }
 
 var throttledSetPWM = _.throttle(function(v){
@@ -29,8 +31,8 @@ socket.onmessage = function(msg){
 
   var data = JSON.parse(msg.data);
   if(data.msg == "resultI2C") {
-    if(callbacks.resultI2C) {
-      callbacks.resultI2C(data);
+    if(callbacks[data.messageId]) {
+      callbacks[data.messageId](data);
     }
   }
 }
