@@ -42,7 +42,7 @@ if(i2c) {
   var rawData_l = i2cInst.readByteSync(MPU_ADDR, W_REG_TEMP+1);
   console.log("rawData_h", rawData_h);
   console.log("rawData_l", rawData_l);
-  var rawData = rawData_h << 8 + rawData_l;
+  var rawData = (rawData_h << 8) + rawData_l;
 
   //Temperature in degrees C = (TEMP_OUT Register Value as a signed quantity)/340 + 36.53
   var celsius = rawData / 340 + 36.53;
