@@ -14,7 +14,7 @@ api.rpi.setServoValue = function(pin, value) {
 
 api.rpi.requestI2C = function(register, callback) {
   var messageId = "msg_" + callbackCount++;
-  socket.send(JSON.stringify({msg:"readI2C", register}));
+  socket.send(JSON.stringify({messageId, msg:"readI2C", register}));
   callbacks[messageId] = callback;
 }
 
