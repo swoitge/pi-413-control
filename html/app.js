@@ -5,6 +5,7 @@ api = {};
 api.rpi = api.rpi || {};
 
 api.rpi.setServoValue = function(pin, value) {
+  console.log("set servo value", value);
   socket.send(JSON.stringify({msg:"setServoValue", pin, value}));
 }
 
@@ -25,6 +26,11 @@ new Slider('#slider1', {
   api.rpi.setServoRange(12, v);
 });
 
+var throttledSetPWM = _.throttle(function(v){
+  console.log("on slideStop", arguments);
+  api.rpi.setServoValue(12, v);
+}, 1000);
+
 //pwm value
 new Slider('#slider2', {
   id:"slider-servo-2",
@@ -33,7 +39,4 @@ new Slider('#slider2', {
   max: 400,
   //range: true,
   value: 2000
-}).on("slideStop", function(v){
-  console.log("on slideStop", arguments);
-  api.rpi.setServoValue(12, v);
-});
+}).on("slide", throttledSetPWM);
