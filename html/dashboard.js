@@ -11,7 +11,8 @@
 
     // roll pitch
     api.rpi.requestRollPitch(function(msg){
-      jQuery("#out_gyro_x").html(msg.result);
+      jQuery("#out_gyro_x").html(msg.result.rollpitch.pitch);
+      jQuery("#out_gyro_y").html(msg.result.rollpitch.roll);
     });
 
     //api.rpi.requestI2C(0x43, function(msg){jQuery("#out_gyro_x").html(msg.result);});
