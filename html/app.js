@@ -4,19 +4,36 @@ api = {};
 
 api.rpi = api.rpi || {};
 
+var callbacks = {};
+
 api.rpi.setServoValue = function(pin, value) {
   console.log("set servo value", value);
   socket.send(JSON.stringify({msg:"setServoValue", pin, value}));
 }
 
-api.rpi.setServoRange = function(pin, range) {
-  socket.send({msg:"setServoRange", pin, range});
+api.rpi.requestI2C = function(register, callback) {
+  socket.send(JSON.stringify({msg:"readI2C", register}));
+  callbacks.resultI2C = callback;
 }
 
 var throttledSetPWM = _.throttle(function(v){
   console.log("on slideStop", arguments);
   api.rpi.setServoValue(12, v);
 }, 1000);
+
+socket.onmessage = function(msg){
+  //console.log("received message", msg);
+
+  // skip something
+  if(msg.data == "something") return;
+
+  var data = JSON.parse(msg.data);
+  if(data.msg == "resultI2C") {
+    if(callbacks.resultI2C) {
+      callbacks.resultI2C(data);
+    }
+  }
+}
 
 //pwm value
 new Slider('#slider1', {

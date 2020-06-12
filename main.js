@@ -80,10 +80,10 @@ wss.on('connection', function (ws) {
       console.log('readI2C', msgObj.register);
       if(i2c) {
         var rawData =  i2cInst.readWordSync(MPU_ADDR, msgObj.register);
-        ws.send(JSON.stringify({msg:"I2C", register:msgObj.register, result:rawData}));
+        ws.send(JSON.stringify({msg:"resultI2C", register:msgObj.register, result:rawData}));
       }
       else {
-        ws.send(JSON.stringify({msg:"I2C", register:0x41, result:42}));
+        ws.send(JSON.stringify({msg:"resultI2C", register:0x41, result:42}));
       }
     }
   });
