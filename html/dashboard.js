@@ -3,6 +3,10 @@
 (function () {
   'use strict'
 
-  feather.replace()
+  feather.replace();
+
+  setInterval(function(){
+    api.rpi.requestI2C(0x41, function(msg){jQuery("#out_temp").html(msg.value);});
+  }, 2000);
 
 }())
