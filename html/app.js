@@ -18,6 +18,12 @@ api.rpi.requestI2C = function(register, callback) {
   callbacks[messageId] = callback;
 }
 
+api.rpi.requestRollPitch = function(callback) {
+  var messageId = "msg_" + callbackCount++;
+  socket.send(JSON.stringify({messageId, msg:"readRollPitch"}));
+  callbacks[messageId] = callback;
+}
+
 var throttledSetPWM = _.throttle(function(v){
   console.log("on slideStop", arguments);
   api.rpi.setServoValue(12, v);
@@ -30,10 +36,8 @@ socket.onmessage = function(msg){
   if(msg.data == "something") return;
 
   var data = JSON.parse(msg.data);
-  if(data.msg == "resultI2C") {
-    if(callbacks[data.messageId]) {
-      callbacks[data.messageId](data);
-    }
+  if(callbacks[data.messageId]) {
+    callbacks[data.messageId](data);
   }
 }
 
