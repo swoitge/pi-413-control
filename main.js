@@ -3,11 +3,12 @@ const http = require('http');
 const WebSocket = require('ws');
 const mpu = require("./lib/mpu-access.js")
 // raspberry only libs
-var rpio, i2c, Gpio;
+var rpio, i2c, mpuGyro;
 
 try {
   rpio = require('rpio');
   i2c = require('i2c-bus');
+  mpuGyro = require("mpu6050-gyro");
   //Gpio = require('pigpio').Gpio;
 }
 catch(e){
@@ -25,6 +26,12 @@ var times = 5;          /* How many times to pulse before exiting */
 const MPU_ADDR = 0x68;
 const W_REG_TEMP = 0x41;
 
+var gyro;
+if(mpuGyro) {
+  var address = 0x68; //MPU6050 address
+  var bus = 1; //i2c bus used
+  gyro = new mpuGyro(bus,MPU_ADDR);
+}
 
 if(rpio) {
   rpio.open(pin, rpio.PWM);
@@ -80,6 +87,24 @@ wss.on('connection', function (ws) {
       }
     }
 
+    if(msgObj && msgObj.msg == "readRollPitch") {
+      console.log('readRollPitch');
+      if(gyro) {
+        var gyro_xyz = gyro.get_gyro_xyz();
+      	var accel_xyz = gyro.get_accel_xyz();
+      	var gyro_data = {
+      		gyro_xyz  : gyro_xyz,
+      		accel_xyz : accel_xyz,
+      		rollpitch : gyro.get_roll_pitch( gyro_xyz, accel_xyz )
+      	}
+
+      	console.log(gyro_data);
+        ws.send(JSON.stringify({
+          messageId : msgObj.messageId,
+          msg       : "readRollPitch",
+          result    : gyro_data}));
+      }
+    }
     if(msgObj && msgObj.msg == "readI2C") {
       console.log('readI2C', msgObj.register);
       if(i2c) {
