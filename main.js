@@ -34,20 +34,16 @@ if(rpio) {
 }
 
 var servo1;
+var i2c_inst;
 
-/*if(Gpio) {
-  servo1 = new Gpio(18, {mode: Gpio.OUTPUT});
-  servo1.servoWrite(1000);
-}*/
-
-/*if(i2c) {
-  var i2c_inst = i2c.openSync(1);
+if(i2c) {
+  i2c_inst = i2c.openSync(1);
   var rawData = mpu.readWord(i2c_inst, MPU_ADDR, W_REG_TEMP);
 
   //Temperature in degrees C = (TEMP_OUT Register Value as a signed quantity)/340 + 36.53
   var celsius = rawData / 340 + 36.53;
   console.log("current temperature", celsius);
-}*/
+}
 
 const baseDir = "./html/";
 
@@ -71,11 +67,23 @@ wss.on('connection', function (ws) {
   ws.on('message', function(message) {
     console.log("wss on message", message);
     var msgObj = JSON.parse(message);
+
     if(msgObj && msgObj.msg == "setServoValue") {
       console.log('set servo value: pin: %s', msgObj.value);
       if(rpio) {
         //servo1.servoWrite(msgObj.value);
         rpio.pwmSetData(12, msgObj.value);
+      }
+    }
+
+    if(msgObj && msgObj.msg == "readI2C") {
+      console.log('readI2C', msgObj.register);
+      if(i2c) {
+        var rawData =  i2cInst.readWordSync(MPU_ADDR, msgObj.register);
+        ws.send(JSON.stringify({msg:"I2C", register:msgObj.register, result:rawData}));
+      }
+      else {
+        ws.send(JSON.stringify({msg:"I2C", register:0x41, result:42}));
       }
     }
   });
