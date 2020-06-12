@@ -11,6 +11,10 @@
 
     // gyro X
     api.rpi.requestI2C(0x43, function(msg){jQuery("#out_gyro_x").html(msg.result);});
+    // gyro Y
+    api.rpi.requestI2C(0x45, function(msg){jQuery("#out_gyro_y").html(msg.result);});
+    // gyro Z
+    api.rpi.requestI2C(0x47, function(msg){jQuery("#out_gyro_z").html(msg.result);});
   }, 2000);
 
 }())
