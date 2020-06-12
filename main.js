@@ -34,11 +34,11 @@ if(rpio) {
 }
 
 var servo1;
-var i2c_inst;
+var i2cInst;
 
 if(i2c) {
-  i2c_inst = i2c.openSync(1);
-  var rawData = mpu.readWord(i2c_inst, MPU_ADDR, W_REG_TEMP);
+  i2cInst = i2c.openSync(1);
+  var rawData = mpu.readWord(i2cInst, MPU_ADDR, W_REG_TEMP);
 
   //Temperature in degrees C = (TEMP_OUT Register Value as a signed quantity)/340 + 36.53
   var celsius = rawData / 340 + 36.53;
