@@ -12,10 +12,36 @@ api.rpi.setServoValue = function(pin, value) {
   socket.send(JSON.stringify({msg:"setServoValue", pin, value}));
 }
 
-api.rpi.requestI2C = function(register, callback) {
-  var messageId = "msg_" + callbackCount++;
-  socket.send(JSON.stringify({messageId, msg:"readI2C", register}));
-  callbacks[messageId] = callback;
+//api.rpi.requestI2C = createMethod("readI2C");
+
+api.call = function() {
+
+  var name = arguments[0];
+
+  // prepare the sending
+  var sendObj = {
+    messageId : "msg_" + callbackCount++,
+    method    : name,
+    args      : []
+  };
+
+  // append all arguments except functions
+  for(var i=1; i<arguments.length; i++) {
+    var arg = arguments[i];
+    if(typeof arg == "function") {
+      // skip
+    }
+    else {
+      sendObj.args.push(arg);
+    }
+  }
+
+  var lastArg = arguments[arguments.length-1];
+  if(typeof lastArg == "function") {
+    // register callback
+    callbacks[sendObj.messageId] = lastArg;
+  }
+  socket.send(JSON.stringify(sendObj));
 }
 
 api.rpi.requestRollPitch = function(callback) {

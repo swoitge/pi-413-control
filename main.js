@@ -73,59 +73,77 @@ const server = http.createServer(function (req, res) {
 
 const wss = new WebSocket.Server({ server });
 
+var methodsHandler = {};
+function provideMethod(name, func) {
+  methodsHandler[name] = function(msgObj, ws){
+    var retval = func.apply({}, msgObj.args);
+    if(retval) {
+      ws.send(JSON.stringify({
+        messageId : msgObj.messageId,
+        result    : retval})
+      );
+    }
+  }
+}
+
+provideMethod("readRollPitch", function(){
+  if(gyro) {
+    var gyro_xyz = gyro.get_gyro_xyz();
+    var accel_xyz = gyro.get_accel_xyz();
+    var gyro_data = {
+      gyro_xyz  : gyro_xyz,
+      accel_xyz : accel_xyz,
+      rollpitch : gyro.get_roll_pitch( gyro_xyz, accel_xyz )
+    }
+
+    console.log(gyro_data);
+    return gyro_data;
+  }
+  else {
+    return {
+      gyro_xyz  : 0,
+      accel_xyz : 0,
+      rollpitch : {roll:12, pitch:24}
+    }
+  }
+});
+
+provideMethod("setServoValue", function(pin, value){
+  console.log('set servo value: pin: %s', msgObj.value);
+  if(rpio) {
+    //servo1.servoWrite(msgObj.value);
+    rpio.pwmSetData(pin, value);
+  }
+});
+
+provideMethod("readI2C", function(register){
+  if(i2c) {
+    var rawData =  i2cInst.readByteSync(MPU_ADDR, register);
+    return rawData;
+  }
+  else {
+    return 42;
+  }
+});
+
 wss.on('connection', function (ws) {
   console.log("wss on connection");
   ws.on('message', function(message) {
     console.log("wss on message", message);
     var msgObj = JSON.parse(message);
 
-    if(msgObj && msgObj.msg == "setServoValue") {
-      console.log('set servo value: pin: %s', msgObj.value);
-      if(rpio) {
-        //servo1.servoWrite(msgObj.value);
-        rpio.pwmSetData(12, msgObj.value);
-      }
-    }
+    if(msgObj) {
 
-    if(msgObj && msgObj.msg == "readRollPitch") {
-      console.log('readRollPitch');
-      if(gyro) {
-        var gyro_xyz = gyro.get_gyro_xyz();
-      	var accel_xyz = gyro.get_accel_xyz();
-      	var gyro_data = {
-      		gyro_xyz  : gyro_xyz,
-      		accel_xyz : accel_xyz,
-      		rollpitch : gyro.get_roll_pitch( gyro_xyz, accel_xyz )
-      	}
-
-      	console.log(gyro_data);
-        ws.send(JSON.stringify({
-          messageId : msgObj.messageId,
-          msg       : "readRollPitch",
-          result    : gyro_data}));
-      }
-    }
-    if(msgObj && msgObj.msg == "readI2C") {
-      console.log('readI2C', msgObj.register);
-      if(i2c) {
-        var rawData =  i2cInst.readByteSync(MPU_ADDR, msgObj.register);
-        ws.send(JSON.stringify({
-          messageId : msgObj.messageId,
-          msg       : "resultI2C",
-          register  : msgObj.register,
-          result    : rawData}));
+      // check handler
+      var handler = methodsHandler[msgObj.method];
+      if(handler) {
+        handler(msgObj, ws);
       }
       else {
-        ws.send(JSON.stringify({
-          messageId : msgObj.messageId,
-          msg       : "resultI2C",
-          register  : msgObj.register,
-          result    : 42}));
+        console.log("no handler found for method", msgObj.method);
       }
     }
   });
-
-  ws.send('something');
 });
 
 server.listen(8080);
