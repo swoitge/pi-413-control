@@ -1,3 +1,4 @@
+'use strict';
 /* globals Chart:false, feather:false */
 
 (function () {
@@ -54,5 +55,26 @@
     // gyro Z
     //api.rpi.requestI2C(0x47, function(msg){jQuery("#out_gyro_z").html(msg.result);});
   }, 2000);
+
+  var app = new Vue({
+    el: '#rc-toggle-control-loop',
+    data: {
+      state  : false,
+      message: 'init'
+    },
+    methods: {
+     toggleState: function () {
+       this.state = !this.state;
+       var thisCtx = this;
+       api.call("toggleControlLoop", this.state, function(){
+       });
+       thisCtx.message = thisCtx.state ? "started" : "stopped";
+     }
+   }
+  });
+
+  jQuery("button.toggle.control-loop").on("click", function(){
+    api.call("readRollPitch", function(){});
+  })
 
 }())

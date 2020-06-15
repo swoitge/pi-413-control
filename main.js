@@ -1,7 +1,9 @@
 const fs = require('fs');
 const http = require('http');
 const WebSocket = require('ws');
-const mpu = require("./lib/mpu-access.js")
+const mpu = require("./lib/mpu-access.js");
+const control = require("./lib/control-loop.js");
+
 // raspberry only libs
 var rpio, i2c, mpuGyro;
 
@@ -26,13 +28,6 @@ var times = 5;          /* How many times to pulse before exiting */
 const MPU_ADDR = 0x68;
 const W_REG_TEMP = 0x41;
 
-var gyro;
-if(mpuGyro) {
-  var address = 0x68; //MPU6050 address
-  var bus = 1; //i2c bus used
-  gyro = new mpuGyro(bus,MPU_ADDR);
-}
-
 if(rpio) {
   rpio.open(pin, rpio.PWM);
   rpio.pwmSetClockDivider(clockdiv);
@@ -40,7 +35,16 @@ if(rpio) {
   rpio.pwmSetData(pin, 80);
 }
 
-var servo1;
+var gyro;
+if(mpuGyro) {
+  var address = 0x68; //MPU6050 address
+  var bus = 1; //i2c bus used
+  gyro = new mpuGyro(bus,MPU_ADDR);
+
+  // provide to module
+  control.init(gyro, rpio);
+}
+
 var i2cInst;
 
 if(i2c) {
@@ -60,6 +64,16 @@ const baseDir = "./html/";
 
 /*jjjj*/
 const server = http.createServer(function (req, res) {
+
+  //
+  console.log("request"+req.url+"-");
+  if(req.url == "/") {
+    res.statusCode = 302;
+    res.setHeader("Location", "/index.html");
+    res.end();
+    return;
+  }
+
   fs.readFile(baseDir + req.url, function (err,data) {
     if (err) {
       res.writeHead(404);
@@ -106,6 +120,16 @@ provideMethod("readRollPitch", function(){
       rollpitch : {roll:12, pitch:24}
     }
   }
+});
+
+provideMethod("getConfig", function(){
+  return control.getConfig();
+});
+provideMethod("updateConfig", function(cfg){
+  return control.updateConfig(cfg);
+});
+provideMethod("toggleControlLoop", function(enabled){
+  return control.toggleControlLoop(enabled);
 });
 
 provideMethod("setServoValue", function(pin, value){
