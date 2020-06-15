@@ -9,7 +9,7 @@ var callbackCount = 0;
 
 api.rpi.setServoValue = function(pin, value) {
   console.log("set servo value", value);
-  socket.send(JSON.stringify({msg:"setServoValue", pin, value}));
+  api.call("setServoValue", pin, value);
 }
 
 //api.rpi.requestI2C = createMethod("readI2C");
