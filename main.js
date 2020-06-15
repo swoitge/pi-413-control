@@ -133,7 +133,7 @@ provideMethod("toggleControlLoop", function(enabled){
 });
 
 provideMethod("setServoValue", function(pin, value){
-  console.log('set servo value: pin: %s', msgObj.value);
+  console.log('set servo value: pin: %s', value);
   if(rpio) {
     //servo1.servoWrite(msgObj.value);
     rpio.pwmSetData(pin, value);
