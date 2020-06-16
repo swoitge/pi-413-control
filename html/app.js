@@ -22,7 +22,8 @@ api.call = function() {
   var sendObj = {
     messageId : "msg_" + callbackCount++,
     method    : name,
-    args      : []
+    args      : [],
+    callback  : false
   };
 
   // append all arguments except functions
@@ -39,6 +40,7 @@ api.call = function() {
   var lastArg = arguments[arguments.length-1];
   if(typeof lastArg == "function") {
     // register callback
+    sendObj.callback = true;
     callbacks[sendObj.messageId] = lastArg;
   }
   socket.send(JSON.stringify(sendObj));
@@ -53,6 +55,11 @@ api.rpi.requestRollPitch = function(callback) {
 var throttledSetPWM = _.throttle(function(v){
   console.log("on slideStop", arguments);
   api.rpi.setServoValue(12, v);
+}, 1000);
+
+var throttledSetInterval = _.throttle(function(v){
+  //console.log("on slideStop", arguments);
+  api.call("setLoopInterval", v);
 }, 1000);
 
 socket.onmessage = function(msg){
@@ -76,3 +83,13 @@ new Slider('#slider1', {
   //range: true,
   value: 2000
 }).on("slide", throttledSetPWM);
+
+//pwm value
+new Slider('#slider-interval', {
+  id:"slider-interval",
+  //tooltip: 'always',
+  min: 10,
+  max: 1000,
+  //range: true,
+  value: 100
+}).on("slide", throttledSetInterval);

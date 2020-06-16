@@ -40,7 +40,7 @@ if(mpuGyro) {
   var address = 0x68; //MPU6050 address
   var bus = 1; //i2c bus used
   gyro = new mpuGyro(bus,MPU_ADDR);
-  
+
   // provide to module
   control.init(gyro, rpio);
 }
@@ -91,7 +91,7 @@ var methodsHandler = {};
 function provideMethod(name, func) {
   methodsHandler[name] = function(msgObj, ws){
     var retval = func.apply({}, msgObj.args);
-    if(retval) {
+    if(msgObj.callback) {
       ws.send(JSON.stringify({
         messageId : msgObj.messageId,
         result    : retval})
@@ -130,6 +130,9 @@ provideMethod("updateConfig", function(cfg){
 });
 provideMethod("toggleControlLoop", function(enabled){
   return control.toggleControlLoop(enabled);
+});
+provideMethod("setLoopInterval", function(ms){
+  return control.setLoopInterval(ms);
 });
 
 provideMethod("setServoValue", function(pin, value){

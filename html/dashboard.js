@@ -60,15 +60,15 @@
     el: '#rc-toggle-control-loop',
     data: {
       state  : false,
-      message: 'init'
+      message: 'RUN'
     },
     methods: {
      toggleState: function () {
        this.state = !this.state;
        var thisCtx = this;
        api.call("toggleControlLoop", this.state, function(){
+         thisCtx.message = thisCtx.state ? "STOP" : "START";
        });
-       thisCtx.message = thisCtx.state ? "started" : "stopped";
      }
    }
   });
