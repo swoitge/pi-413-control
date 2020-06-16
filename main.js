@@ -9,7 +9,7 @@ var rpio, i2c, mpuGyro;
 
 try {
   rpio = require('rpio');
-  i2c = require('i2c-bus');
+  //i2c = require('i2c-bus');
   mpuGyro = require("mpu6050-gyro");
   //Gpio = require('pigpio').Gpio;
 }
@@ -40,7 +40,7 @@ if(mpuGyro) {
   var address = 0x68; //MPU6050 address
   var bus = 1; //i2c bus used
   gyro = new mpuGyro(bus,MPU_ADDR);
-
+  
   // provide to module
   control.init(gyro, rpio);
 }
