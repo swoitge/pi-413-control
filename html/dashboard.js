@@ -7,7 +7,8 @@
 
   var datasetPitch    = {label: "PITCH",   data: [], color: "#3c8dbc" };
   var datasetRoll     = {label: "ROLL",     data: [], color: "#008d00" };
-  var datasetCorrect  = {label: "CORRECT",  data: [], color: "#3c8d00" };
+  var datasetPitch_C  = {label: "COR Pitch",  data: [], color: "#3c8dff" };
+  var datasetRoll_C   = {label: "COR Roll",  data: [], color: "#008dff" };
   var _dataset = [datasetPitch, datasetRoll];
 
   var options = {xaxis: { mode: "time", timeBase: "milliseconds"}};
@@ -24,6 +25,8 @@
 
       datasetPitch.data.push([new Date().getTime(), msg.result.rollpitch.pitch]);
       datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
+      datasetPitch_C.data.push([new Date().getTime(), msg.result.corrections.pitch]);
+      //datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
       $.plot($("#placeholder"), _dataset, options);
       //chart.data.datasets[0].data.push({x:new Date(), y:msg.result.rollpitch.pitch});
       //chart.update();
