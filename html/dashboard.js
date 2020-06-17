@@ -2,39 +2,16 @@
 /* globals Chart:false, feather:false */
 
 (function () {
-  'use strict'
 
   feather.replace();
 
-  var chartCtx = jQuery("#realtime-chart");
-  var chart = new Chart(chartCtx, {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: [
-        {
-          label: 'Roll',
-          yAxesGroup: 'A',
-          data: []
-        },
-        {
-          label: 'Pitch',
-          yAxesGroup: 'B',
-          data: []
-        }
-      ]
-    },
-    options: {
-        scales: {
-            xAxes: [{
-                type: 'time',
-                time: {
-                    //unit: 'month'
-                }
-            }]
-        }
-    }
-});
+  var datasetPitch    = {label: "PITCH",   data: [], color: "#3c8dbc" };
+  var datasetRoll     = {label: "ROLL",     data: [], color: "#008d00" };
+  var datasetCorrect  = {label: "CORRECT",  data: [], color: "#3c8d00" };
+  var _dataset = [datasetPitch, datasetRoll];
+
+  var options = {xaxis: { mode: "time", timeBase: "milliseconds"}};
+
 
   setInterval(function(){
     // temperature
@@ -45,8 +22,11 @@
       jQuery("#out_gyro_x").html(msg.result.rollpitch.pitch);
       jQuery("#out_gyro_y").html(msg.result.rollpitch.roll);
 
-      chart.data.datasets[0].data.push({x:new Date(), y:msg.result.rollpitch.pitch});
-      chart.update();
+      datasetPitch.data.push([new Date().getTime(), msg.result.rollpitch.pitch]);
+      datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
+      $.plot($("#placeholder"), _dataset, options);
+      //chart.data.datasets[0].data.push({x:new Date(), y:msg.result.rollpitch.pitch});
+      //chart.update();
     });
 
     //api.rpi.requestI2C(0x43, function(msg){jQuery("#out_gyro_x").html(msg.result);});

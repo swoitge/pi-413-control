@@ -4,6 +4,7 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
+    "lpf": "^1.0.0",
     "node-pid-controller": "^1.0.1",
     "underscore": "^1.10.2",
     "ws": "^7.3.0"
