@@ -111,6 +111,10 @@ provideMethod("readRollPitch", function(){
     }
 
     console.log(gyro_data);
+
+    // add corrections
+    gyro_data.corrections = control.getLatestCorrections();
+
     return gyro_data;
   }
   else {
