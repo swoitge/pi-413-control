@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo apt-get update && apt-get install -y git 
+
 cd /home/pi
 curl -o nodejs.tar.gz https://nodejs.org/dist/v9.9.0/node-v9.9.0-linux-armv6l.tar.gz
 tar -xzf nodejs.tar.gz
