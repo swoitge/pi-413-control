@@ -13,4 +13,4 @@ sudo cp -r node-v9.9.0-linux-armv6l/* /usr/local/
 
 git clone https://github.com/swoitge/pi-413-control.git
 cd pi-413-control
-npm install rpio i2c-bus pigpio mpu6050-gyro -save
+npm install rpio i2c-bus mpu6050-gyro -save
