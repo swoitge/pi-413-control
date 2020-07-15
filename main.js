@@ -121,7 +121,8 @@ provideMethod("readRollPitch", function(){
     return {
       gyro_xyz  : 0,
       accel_xyz : 0,
-      rollpitch : {roll:12, pitch:24}
+      rollpitch : {roll:12, pitch:24},
+      corrections:{pitch:{sum:0}, roll:{sum:0}}
     }
   }
 });
@@ -145,6 +146,11 @@ provideMethod("setServoValue", function(pin, value){
     //servo1.servoWrite(msgObj.value);
     rpio.pwmSetData(pin, value);
   }
+});
+
+provideMethod("setTarget", function(controller, value){
+  console.log('set controller target value: %s', value);
+  
 });
 
 provideMethod("readI2C", function(register){
