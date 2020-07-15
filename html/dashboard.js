@@ -25,7 +25,8 @@
 
       datasetPitch.data.push([new Date().getTime(), msg.result.rollpitch.pitch]);
       datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
-      datasetPitch_C.data.push([new Date().getTime(), msg.result.corrections.pitch]);
+
+      datasetPitch_C.data.push([new Date().getTime(), msg.result.corrections.pitch.sum]);
       //datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
       $.plot($("#placeholder"), _dataset, options);
       //chart.data.datasets[0].data.push({x:new Date(), y:msg.result.rollpitch.pitch});
@@ -39,23 +40,70 @@
     //api.rpi.requestI2C(0x47, function(msg){jQuery("#out_gyro_z").html(msg.result);});
   }, 2000);
 
-  var app = new Vue({
-    el: '#rc-toggle-control-loop',
-    data: {
-      state  : false,
-      message: 'RUN'
+  Vue.component('controller', {
+    props : ["controller"],
+    data: function(){
+      return {
+        pid    : {P:0.5, I:0, D:0},
+        target : 0
+      };
+    },
+    mounted:function(){
+      var thisCtx = this;
+      new Slider(this.$el.querySelector('[data-role="target"]'), {min : -90, max : 90, value : 0})
+        .on("slide", function(value){
+          thisCtx.updateTarget(value);
+        });
+      new Slider(this.$el.querySelector('[data-role="PID-P"]'), {min : 0, max : 2, step:0.01, value : 0})
+        .on("slide", function(value){thisCtx.updatePID("P", value);});
+      new Slider(this.$el.querySelector('[data-role="PID-I"]'), {min : 0, max : 2, step:0.01, value : 0})
+        .on("slide", function(value){thisCtx.updatePID("I", value);});
+      new Slider(this.$el.querySelector('[data-role="PID-D"]'), {min : 0, max : 2, step:0.01, value : 0})
+        .on("slide", function(value){thisCtx.updatePID("D", value);});
     },
     methods: {
-     toggleState: function () {
-       this.state = !this.state;
-       var thisCtx = this;
-       api.call("toggleControlLoop", this.state, function(){
-         thisCtx.message = thisCtx.state ? "STOP" : "START";
-       });
-     }
-   }
-  });
+      updateTarget: function (target) {
+        var thisCtx = this;
+        api.call("setTarget", thisCtx.controller.name, target, function(){
+          //thisCtx.message = thisCtx.state ? "STOP" : "START";
+        });
+      },
+      updatePID: function (param, value) {
+        var thisCtx = this;
+        thisCtx.pid[param] = value
+        api.call("setPID", thisCtx.controller.name, thisCtx.pid, function(){
+          //thisCtx.message = thisCtx.state ? "STOP" : "START";
+        });
+      }
+    }
+  })
 
+  // root controller
+  var app = new Vue({
+    el      : '#app',
+    data    : {
+      state       : false,
+      message     : 'RUN',
+      controllers : [{name:"pitch"}, {name:"roll"}]},
+    methods : {
+      toggleState: function () {
+        this.state = !this.state;
+        var thisCtx = this;
+        api.call("toggleControlLoop", this.state, function(){
+          thisCtx.message = thisCtx.state ? "STOP" : "START";
+        });
+      }
+    }
+  });
+  /*
+
+  new Slider('#c1-pid-p', {min : 0, max : 2, step:0.01, value : 0.5})
+    .on("slide", function(value){c1.updatePID("P", value)});
+  new Slider('#c1-pid-i', {min : 0, max : 2, step:0.01, value : 0.5})
+    .on("slide", function(value){c1.updatePID("I", value)});
+  new Slider('#c1-pid-d', {min : 0, max : 2, step:0.01, value : 0.5})
+    .on("slide", function(value){c1.updatePID("D", value)});
+*/
   jQuery("button.toggle.control-loop").on("click", function(){
     api.call("readRollPitch", function(){});
   })
