@@ -153,6 +153,11 @@ provideMethod("setTarget", function(controller, value){
   control.setTarget(controller, value);
 });
 
+provideMethod("setPID", function(controller, values){
+  console.log('setPID values',controller, values);
+  control.setPID(controller, values);
+});
+
 provideMethod("readI2C", function(register){
   if(i2c) {
     var rawData =  i2cInst.readByteSync(MPU_ADDR, register);
