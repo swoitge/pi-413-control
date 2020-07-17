@@ -149,8 +149,8 @@ provideMethod("setServoValue", function(pin, value){
 });
 
 provideMethod("setTarget", function(controller, value){
-  console.log('set controller target value: %s', value);
-  
+  console.log('set controller target value',controller, value);
+  control.setTarget(controller, value);
 });
 
 provideMethod("readI2C", function(register){
