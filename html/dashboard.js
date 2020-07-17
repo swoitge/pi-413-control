@@ -13,7 +13,7 @@
 
   var options = {xaxis: { mode: "time", timeBase: "milliseconds"}};
 
-
+  /*
   setInterval(function(){
     // temperature
     api.call("readI2C", 0x41, function(msg){jQuery("#out_temp").html(msg.result);});
@@ -39,6 +39,8 @@
     // gyro Z
     //api.rpi.requestI2C(0x47, function(msg){jQuery("#out_gyro_z").html(msg.result);});
   }, 2000);
+*/
+
 
   Vue.component('controller', {
     props : ["controller"],
@@ -100,17 +102,10 @@
       }
     }
   });
-  /*
 
-  new Slider('#c1-pid-p', {min : 0, max : 2, step:0.01, value : 0.5})
-    .on("slide", function(value){c1.updatePID("P", value)});
-  new Slider('#c1-pid-i', {min : 0, max : 2, step:0.01, value : 0.5})
-    .on("slide", function(value){c1.updatePID("I", value)});
-  new Slider('#c1-pid-d', {min : 0, max : 2, step:0.01, value : 0.5})
-    .on("slide", function(value){c1.updatePID("D", value)});
-*/
+  /*
   jQuery("button.toggle.control-loop").on("click", function(){
     api.call("readRollPitch", function(){});
-  })
+  })*/
 
 }())
