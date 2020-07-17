@@ -83,13 +83,3 @@ new Slider('#slider1', {
   //range: true,
   value: 2000
 }).on("slide", throttledSetPWM);
-
-//pwm value
-new Slider('#slider-interval', {
-  id:"slider-interval",
-  //tooltip: 'always',
-  min: 10,
-  max: 1000,
-  //range: true,
-  value: 100
-}).on("slide", throttledSetInterval);

@@ -85,6 +85,11 @@
       state       : false,
       message     : 'RUN',
       controllers : [{name:"pitch"}, {name:"roll"}]},
+    mounted : function() {
+        var thisCtx = this;
+        new Slider(this.$el.querySelector('#slider-interval'), {min : 0, max : 500, step:1, value : 100})
+          .on("slide", throttledSetInterval);
+      },
     methods : {
       toggleState: function () {
         this.state = !this.state;
