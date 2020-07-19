@@ -13,6 +13,42 @@
 
   var options = {xaxis: { mode: "time", timeBase: "milliseconds"}};
 
+  // register an onopen callback
+  api.onopen = function(){
+    api.call("getConfig", function(result){
+      console.log("retrieved config", result);
+
+      var config = result.result;
+
+      // root controller
+      var app = new Vue({
+        el      : '#app',
+        data    : {
+          state       : false,
+          message     : 'RUN',
+          controllers : config.controllers,
+          servos      : config.servos
+        },
+        mounted : function() {
+          var thisCtx = this;
+          new Slider(this.$el.querySelector('#slider-interval'), {min : 0, max : 500, step:1, value : 100})
+            .on("slide", throttledSetInterval);
+        },
+        methods : {
+          toggleState: function () {
+            this.state = !this.state;
+            var thisCtx = this;
+            api.call("toggleControlLoop", this.state, function(){
+              thisCtx.message = thisCtx.state ? "STOP" : "START";
+            });
+          }
+        }
+      });
+
+    });
+  }
+
+
   /*
   setInterval(function(){
     // temperature
@@ -44,23 +80,17 @@
 
   Vue.component('controller', {
     props : ["controller"],
-    data: function(){
-      return {
-        pid    : {P:0.5, I:0, D:0},
-        target : 0
-      };
-    },
     mounted:function(){
       var thisCtx = this;
-      new Slider(this.$el.querySelector('[data-role="target"]'), {min : -90, max : 90, value : 0})
+      new Slider(this.$el.querySelector('[data-role="target"]'), {min : -90, max : 90, value : this.controller.target})
         .on("slide", function(value){
           thisCtx.updateTarget(value);
         });
-      new Slider(this.$el.querySelector('[data-role="PID-P"]'), {min : 0, max : 2, step:0.01, value : 0})
+      new Slider(this.$el.querySelector('[data-role="PID-P"]'), {min : 0, max : 2, step:0.01, value : this.controller.pid.P})
         .on("slide", function(value){thisCtx.updatePID("P", value);});
-      new Slider(this.$el.querySelector('[data-role="PID-I"]'), {min : 0, max : 2, step:0.01, value : 0})
+      new Slider(this.$el.querySelector('[data-role="PID-I"]'), {min : 0, max : 2, step:0.01, value : this.controller.pid.I})
         .on("slide", function(value){thisCtx.updatePID("I", value);});
-      new Slider(this.$el.querySelector('[data-role="PID-D"]'), {min : 0, max : 2, step:0.01, value : 0})
+      new Slider(this.$el.querySelector('[data-role="PID-D"]'), {min : 0, max : 2, step:0.01, value : this.controller.pid.D})
         .on("slide", function(value){thisCtx.updatePID("D", value);});
     },
     methods: {
@@ -72,40 +102,44 @@
       },
       updatePID: function (param, value) {
         var thisCtx = this;
-        thisCtx.pid[param] = value
-        api.call("setPID", thisCtx.controller.name, thisCtx.pid, function(){
+        thisCtx.controller.pid[param] = value
+        api.call("setPID", thisCtx.controller.name, thisCtx.controller.pid, function(){
           //thisCtx.message = thisCtx.state ? "STOP" : "START";
         });
       }
     }
   })
 
-  // root controller
-  var app = new Vue({
-    el      : '#app',
-    data    : {
-      state       : false,
-      message     : 'RUN',
-      controllers : [{name:"pitch"}, {name:"roll"}]},
-    mounted : function() {
+  Vue.component('servo', {
+    props : ["servo"],
+    mounted:function(){
+      var thisCtx = this;
+      this.$el.querySelector('[data-role="controller"]').setAttribute("value", this.servo.controller);
+      new Slider(this.$el.querySelector('[data-role="manual"]'), {min : -90, max : 90, value : 0})
+        .on("slide", function(value){
+          thisCtx.setManual(value);
+        });
+      new Slider(this.$el.querySelector('[data-role="multiply"]'), {min : -2, max : 2, step:0.01, value : 1})
+        .on("slide", function(value){
+          thisCtx.updateMultiply(value);
+        });
+    },
+    methods: {
+      setManual: function (value) {
         var thisCtx = this;
-        new Slider(this.$el.querySelector('#slider-interval'), {min : 0, max : 500, step:1, value : 100})
-          .on("slide", throttledSetInterval);
+        api.call("setManual", thisCtx.servo.id, value, function(){
+          //thisCtx.message = thisCtx.state ? "STOP" : "START";
+        });
       },
-    methods : {
-      toggleState: function () {
-        this.state = !this.state;
+      updateMultiply: function (value) {
         var thisCtx = this;
-        api.call("toggleControlLoop", this.state, function(){
-          thisCtx.message = thisCtx.state ? "STOP" : "START";
+        thisCtx.multiply = value;
+        api.call("setMultiply", thisCtx.servo.id, value, function(){
+          //thisCtx.message = thisCtx.state ? "STOP" : "START";
         });
       }
     }
-  });
+  })
 
-  /*
-  jQuery("button.toggle.control-loop").on("click", function(){
-    api.call("readRollPitch", function(){});
-  })*/
 
 }())

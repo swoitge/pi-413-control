@@ -8,6 +8,8 @@
     <meta name="generator" content="Jekyll v4.0.1">
     <title>Dashboard Template · Bootstrap</title>
 
+    <link rel="stylesheet" href="style.css">
+
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
@@ -119,30 +121,59 @@
           v-for="controller in controllers"
           v-bind:controller="controller"
           v-bind:key="controller.name">
-          <div class="form-group">
-            <h2>{{controller.name}}</h2>
-            <label>Manual</label>
-            <div style="width:100%">
-              <input id="slider1" type="text" class="span2" value="" data-slider-handle="square" />
+          <div class="box box-default box-solid">
+            <div class="box-header">
+              <h3 class="box-title">{{controller.name}}</h3>
             </div>
-            <label>Target</label>
-            <div style="width:100%">
-              <input type="text" data-role="target" class="span2" value="" data-slider-handle="square" />
-            </div>
-            <label>PID - P</label>
-            <div style="width:100%">
-              <input data-role="PID-P"  type="text" class="span2" value="" data-slider-handle="square" />
-            </div>
-            <label>PID - I</label>
-            <div style="width:100%">
-              <input data-role="PID-I"  type="text" class="span2" value="" data-slider-handle="square" />
-            </div>
-            <label>PID - D</label>
-            <div style="width:100%">
-              <input data-role="PID-D" type="text" class="span2" value="" data-slider-handle="square" />
+            <div class="box-body">
+              <label>Target</label>
+              <div style="width:100%">
+                <input type="text" data-role="target" class="span2" value="" data-slider-handle="square" />
+              </div>
+              <label>PID - P</label>
+              <div style="width:100%">
+                <input data-role="PID-P"  type="text" class="span2" value="" data-slider-handle="square" />
+              </div>
+              <label>PID - I</label>
+              <div style="width:100%">
+                <input data-role="PID-I"  type="text" class="span2" value="" data-slider-handle="square" />
+              </div>
+              <label>PID - D</label>
+              <div style="width:100%">
+                <input data-role="PID-D" type="text" class="span2" value="" data-slider-handle="square" />
+              </div>
             </div>
           </div>
         </controller>
+
+        <servo class="form"
+          inline-template
+          v-for="servo in servos"
+          v-bind:servo="servo"
+          v-bind:key="servo.id">
+          <div class="box box-default box-solid">
+            <div class="box-header">
+              <h3 class="box-title">{{servo.id}}</h3>
+            </div>
+            <div class="box-body">
+              <label>Controller</label>
+              <div style="width:100%">
+                <select class="form-control" data-role="controller">
+                  <option id="pitch">Pitch</option>
+                  <option id="roll">Roll</option>
+                </select>
+              </div>
+              <label>Manual</label>
+              <div style="width:100%">
+                <input type="text" data-role="manual" class="span2" value="" data-slider-handle="square" />
+              </div>
+              <label>Multiply</label>
+              <div style="width:100%">
+                <input type="text" data-role="multiply" class="span2" value="" data-slider-handle="square" />
+              </div>
+            </div>
+          </div>
+        </servo>
 
       </div>
 

@@ -62,6 +62,13 @@ var throttledSetInterval = _.throttle(function(v){
   api.call("setLoopInterval", v);
 }, 1000);
 
+socket.onopen = function(){
+  console.log("websocket established");
+  if(api.onopen) {
+    api.onopen();
+  }
+}
+
 socket.onmessage = function(msg){
   //console.log("received message", msg);
 
@@ -73,13 +80,3 @@ socket.onmessage = function(msg){
     callbacks[data.messageId](data);
   }
 }
-
-//pwm value
-new Slider('#slider1', {
-  id:"slider-servo-1",
-  //tooltip: 'always',
-  min: 70,
-  max: 400,
-  //range: true,
-  value: 2000
-}).on("slide", throttledSetPWM);
