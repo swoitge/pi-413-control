@@ -40,10 +40,9 @@ if(mpuGyro) {
   var address = 0x68; //MPU6050 address
   var bus = 1; //i2c bus used
   gyro = new mpuGyro(bus,MPU_ADDR);
-
-  // provide to module
-  control.init(gyro, rpio);
 }
+// provide to module
+control.init(gyro, rpio);
 
 var i2cInst;
 
@@ -130,9 +129,6 @@ provideMethod("readRollPitch", function(){
 provideMethod("getConfig", function(){
   return control.getConfig();
 });
-provideMethod("updateConfig", function(cfg){
-  return control.updateConfig(cfg);
-});
 provideMethod("toggleControlLoop", function(enabled){
   return control.toggleControlLoop(enabled);
 });
@@ -146,6 +142,10 @@ provideMethod("setServoValue", function(pin, value){
     //servo1.servoWrite(msgObj.value);
     rpio.pwmSetData(pin, value);
   }
+});
+
+provideMethod("setMultiply", function(id, value){
+  control.setMultiply(id, value);
 });
 
 provideMethod("setTarget", function(controller, value){
