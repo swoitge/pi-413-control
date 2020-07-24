@@ -24,10 +24,12 @@
       var app = new Vue({
         el      : '#app',
         data    : {
-          state       : false,
-          message     : 'RUN',
-          controllers : config.controllers,
-          servos      : config.servos
+          state           : false,
+          message         : 'RUN',
+          recordState     : false,
+          recordStateMsg  : "START",
+          controllers     : config.controllers,
+          servos          : config.servos
         },
         mounted : function() {
           var thisCtx = this;
@@ -41,6 +43,20 @@
             api.call("toggleControlLoop", this.state, function(){
               thisCtx.message = thisCtx.state ? "STOP" : "START";
             });
+          },
+          toggleRecord: function () {
+            var thisCtx = this;
+            if(this.recordState) {
+              api.call("stopRecord", function(result) {
+                console.log("stopped recording", result);
+              });
+            }
+            else {
+              api.call("startRecord", function() {
+              });
+            }
+            this.recordState = !this.recordState;
+            thisCtx.recordStateMsg = thisCtx.recordState ? "STOP" : "START";
           }
         }
       });
@@ -139,7 +155,57 @@
         });
       }
     }
-  })
+  });
 
+  // init plotly
+  var x = [10, 4, 5];
+  var y = [8, 4, 7];
+  var z = [6, 4, 9];
+
+  Plotly.newPlot('plotly', [{
+    type: 'scatter3d',
+    mode: 'lines+markers',
+    x: x,
+    y: y,
+    z: z,
+    line: {
+      width: 6,
+      /*color: c,*/
+      colorscale: "Viridis"},
+    marker: {
+      size: 3.5,
+      /*color: c,*/
+      colorscale: "Greens",
+      cmin: -20,
+      cmax: 50
+    }},
+  ]);
+
+  jQuery("button.new-plot-value").on("click", function(){
+
+    x.push(Math.random() * 5);
+    y.push(Math.random() * 4);
+    z.push(Math.random() * 3);
+
+    Plotly.react('plotly', [{
+      type: 'scatter3d',
+      mode: 'lines+markers',
+      x: x,
+      y: y,
+      z: z,
+      line: {
+        width: 6,
+        /*color: c,*/
+        colorscale: "Viridis"},
+        marker: {
+          size: 3.5,
+          /*color: c,*/
+          colorscale: "Greens",
+          cmin: -20,
+          cmax: 50
+        }},
+      ]);
+
+  });
 
 }())
