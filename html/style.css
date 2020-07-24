@@ -8,6 +8,13 @@
   color: white;
 }
 
+.box.box-solid .box-header>.box-tools{
+  position: absolute;
+  right: 10px;
+  top: 5px;
+}
+
+
 .box.box-solid .box-header h3{
   font-size: 20px;
 }

@@ -41,6 +41,8 @@
     </style>
     <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
@@ -103,17 +105,19 @@
 
 
 
-      <div id="app">
+      <div id="app" class="row">
 
-        <button v-on:click="toggleState" type="button" class="btn btn-danger">{{message}}</button>
+        <div class="col-md-12">
+          <button v-on:click="toggleState" type="button" class="btn btn-danger">{{message}}</button>
+          <button v-on:click="toggleRecord" type="button" class="btn btn-danger">{{recordStateMsg}}</button>
 
-        <div class="form-group">
-          <label>Interval</label>
-          <div style="width:100%">
-            <input id="slider-interval" type="text" class="span2" value="" data-slider-handle="square" />
+          <div class="form-group">
+            <label>Interval</label>
+            <div style="width:100%">
+              <input id="slider-interval" type="text" class="span2" value="" data-slider-handle="square" />
+            </div>
           </div>
-        </div>
-
+      </div>
 
 
         <controller class="form"
@@ -121,26 +125,28 @@
           v-for="controller in controllers"
           v-bind:controller="controller"
           v-bind:key="controller.name">
-          <div class="box box-default box-solid">
-            <div class="box-header">
-              <h3 class="box-title">{{controller.name}}</h3>
-            </div>
-            <div class="box-body">
-              <label>Target</label>
-              <div style="width:100%">
-                <input type="text" data-role="target" class="span2" value="" data-slider-handle="square" />
+          <div class="col-md-6">
+            <div class="box box-default box-solid">
+              <div class="box-header">
+                <h3 class="box-title">{{controller.name}}</h3>
               </div>
-              <label>PID - P</label>
-              <div style="width:100%">
-                <input data-role="PID-P"  type="text" class="span2" value="" data-slider-handle="square" />
-              </div>
-              <label>PID - I</label>
-              <div style="width:100%">
-                <input data-role="PID-I"  type="text" class="span2" value="" data-slider-handle="square" />
-              </div>
-              <label>PID - D</label>
-              <div style="width:100%">
-                <input data-role="PID-D" type="text" class="span2" value="" data-slider-handle="square" />
+              <div class="box-body">
+                <label>Target</label>
+                <div style="width:100%">
+                  <input type="text" data-role="target" class="span2" value="" data-slider-handle="square" />
+                </div>
+                <label>PID - P</label>
+                <div style="width:100%">
+                  <input data-role="PID-P"  type="text" class="span2" value="" data-slider-handle="square" />
+                </div>
+                <label>PID - I</label>
+                <div style="width:100%">
+                  <input data-role="PID-I"  type="text" class="span2" value="" data-slider-handle="square" />
+                </div>
+                <label>PID - D</label>
+                <div style="width:100%">
+                  <input data-role="PID-D" type="text" class="span2" value="" data-slider-handle="square" />
+                </div>
               </div>
             </div>
           </div>
@@ -151,33 +157,48 @@
           v-for="servo in servos"
           v-bind:servo="servo"
           v-bind:key="servo.id">
-          <div class="box box-default box-solid">
-            <div class="box-header">
-              <h3 class="box-title">{{servo.id}}</h3>
-            </div>
-            <div class="box-body">
-              <label>Controller</label>
-              <div style="width:100%">
-                <select class="form-control" data-role="controller">
-                  <option id="pitch">Pitch</option>
-                  <option id="roll">Roll</option>
-                </select>
+          <div class="col-md-6">
+            <div class="box box-default box-solid">
+              <div class="box-header">
+                <h3 class="box-title">{{servo.id}}</h3>
               </div>
-              <label>Manual</label>
-              <div style="width:100%">
-                <input type="text" data-role="manual" class="span2" value="" data-slider-handle="square" />
-              </div>
-              <label>Multiply</label>
-              <div style="width:100%">
-                <input type="text" data-role="multiply" class="span2" value="" data-slider-handle="square" />
+              <div class="box-body">
+                <label>Controller</label>
+                <div style="width:100%">
+                  <select class="form-control" data-role="controller">
+                    <option id="pitch">Pitch</option>
+                    <option id="roll">Roll</option>
+                  </select>
+                </div>
+                <label>Manual</label>
+                <div style="width:100%">
+                  <input type="text" data-role="manual" class="span2" value="" data-slider-handle="square" />
+                </div>
+                <label>Multiply</label>
+                <div style="width:100%">
+                  <input type="text" data-role="multiply" class="span2" value="" data-slider-handle="square" />
+                </div>
               </div>
             </div>
           </div>
         </servo>
 
+
+
+
       </div>
 
-
+      <div class="box box-default box-solid col-md-6">
+        <div class="box-header">
+          <h3 class="box-title">Plot</h3>
+          <div class="box-tools">
+            <button class="btn btn-xs btn-success new-plot-value" type="button">+</button>
+          </div>
+        </div>
+        <div class="box-body">
+          <div id="plotly" style="height: 400px; width:100%">...</div>
+        </div>
+      </div>
 
 
       <canvas id="realtime-chart" width="100%" height="400"></canvas>

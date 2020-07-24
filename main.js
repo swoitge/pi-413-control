@@ -158,6 +158,16 @@ provideMethod("setPID", function(controller, values){
   control.setPID(controller, values);
 });
 
+// record flight
+provideMethod("startRecord", function(){
+  //console.log('startRecord',controller, values);
+  control.startRecord();
+});
+provideMethod("stopRecord", function(){
+  //console.log('setPID values',controller, values);
+  return control.stopRecord();
+});
+
 provideMethod("readI2C", function(register){
   if(i2c) {
     var rawData =  i2cInst.readByteSync(MPU_ADDR, register);
