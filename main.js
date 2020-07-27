@@ -103,10 +103,15 @@ provideMethod("readRollPitch", function(){
   if(gyro) {
     var gyro_xyz = gyro.get_gyro_xyz();
     var accel_xyz = gyro.get_accel_xyz();
+
+    var roll      = accel_xyz.x/16384.0 * -100;
+    var pitch     = accel_xyz.y/16384.0 * -100;
+
     var gyro_data = {
       gyro_xyz  : gyro_xyz,
       accel_xyz : accel_xyz,
-      rollpitch : gyro.get_roll_pitch( gyro_xyz, accel_xyz )
+      rollpitch : gyro.get_roll_pitch( gyro_xyz, accel_xyz ),
+      rollpitch2: {roll,pitch}
     }
 
     console.log(gyro_data);

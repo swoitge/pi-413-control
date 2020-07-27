@@ -5,11 +5,11 @@
 
   feather.replace();
 
-  var datasetPitch    = {label: "PITCH",   data: [], color: "#3c8dbc" };
-  var datasetRoll     = {label: "ROLL",     data: [], color: "#008d00" };
+  var datasetPitch    = {label: "PITCH",      data: [], color: "#3c8dbc" };
+  var datasetRoll     = {label: "ROLL",       data: [], color: "#008d00" };
   var datasetPitch_C  = {label: "COR Pitch",  data: [], color: "#3c8dff" };
-  var datasetRoll_C   = {label: "COR Roll",  data: [], color: "#008dff" };
-  var _dataset = [datasetPitch, datasetRoll];
+  var datasetRoll_C   = {label: "COR Roll",   data: [], color: "#008dff" };
+  var _dataset = [datasetPitch, datasetRoll, datasetPitch_C, datasetRoll_C];
 
   var options = {xaxis: { mode: "time", timeBase: "milliseconds"}};
 
@@ -65,10 +65,10 @@
   }
 
 
-  /*
+
   setInterval(function(){
     // temperature
-    api.call("readI2C", 0x41, function(msg){jQuery("#out_temp").html(msg.result);});
+    //api.call("readI2C", 0x41, function(msg){jQuery("#out_temp").html(msg.result);});
 
     // roll pitch
     api.call("readRollPitch", function(msg){
@@ -77,9 +77,8 @@
 
       datasetPitch.data.push([new Date().getTime(), msg.result.rollpitch.pitch]);
       datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
-
       datasetPitch_C.data.push([new Date().getTime(), msg.result.corrections.pitch.sum]);
-      //datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
+      datasetRoll_C.data.push([new Date().getTime(), msg.result.corrections.roll.sum]);
       $.plot($("#placeholder"), _dataset, options);
       //chart.data.datasets[0].data.push({x:new Date(), y:msg.result.rollpitch.pitch});
       //chart.update();
@@ -91,7 +90,7 @@
     // gyro Z
     //api.rpi.requestI2C(0x47, function(msg){jQuery("#out_gyro_z").html(msg.result);});
   }, 2000);
-*/
+
 
 
   Vue.component('controller', {
