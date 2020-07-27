@@ -1,16 +1,16 @@
 const fs = require('fs');
 const http = require('http');
 const WebSocket = require('ws');
-const mpu = require("./lib/mpu-access.js");
+//const mpu     = require("./lib/mpu-access.js");
 const control = require("./lib/control-loop.js");
+const mpuGyro = require("./lib/gyro-mpu6050.js");
 
 // raspberry only libs
-var rpio, i2c, mpuGyro;
+var rpio, i2c;
 
 try {
   rpio = require('rpio');
   //i2c = require('i2c-bus');
-  mpuGyro = require("mpu6050-gyro");
   //Gpio = require('pigpio').Gpio;
 }
 catch(e){
