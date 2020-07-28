@@ -79,10 +79,10 @@
       var rollCorrection = msg.result.corrections.roll ? msg.result.corrections.roll.sum : 0;
 
       datasetPitch.data.push([new Date().getTime(), msg.result.rollpitch.pitch]);
-      datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
+      //datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
       datasetPitch_C.data.push([new Date().getTime(), pitchCorrection]);
-      datasetRoll_C.data.push([new Date().getTime(), rollCorrection]);
-      $.plot($("#placeholder"), _dataset, options);
+      //datasetRoll_C.data.push([new Date().getTime(), rollCorrection]);
+      $.plot($("#chart-pitch"), _dataset, options);
       //chart.data.datasets[0].data.push({x:new Date(), y:msg.result.rollpitch.pitch});
       //chart.update();
     });
