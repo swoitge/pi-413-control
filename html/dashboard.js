@@ -11,7 +11,12 @@
   var datasetRoll_C   = {label: "COR Roll",   data: [], color: "#008dff" };
   var _dataset = [datasetPitch, datasetRoll, datasetPitch_C, datasetRoll_C];
 
-  var options = {xaxis: { mode: "time", timeBase: "milliseconds"}};
+  var options = {
+    series: {
+        lines: { show: true, lineWidth:0.7},
+    },
+    xaxis: { mode: "time", timeBase: "milliseconds"}
+  };
 
   // register an onopen callback
   api.onopen = function(){
