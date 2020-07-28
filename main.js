@@ -111,13 +111,11 @@ provideMethod("readRollPitch", function(){
       gyro_xyz  : gyro_xyz,
       accel_xyz : accel_xyz,
       rollpitch : gyro.get_roll_pitch( gyro_xyz, accel_xyz ),
-      rollpitch2: {roll,pitch}
+      rollpitch2: {roll,pitch},
+      corrections : control.getLatestCorrections();
     }
 
     console.log(gyro_data);
-
-    // add corrections
-    gyro_data.corrections = control.getLatestCorrections();
 
     return gyro_data;
   }

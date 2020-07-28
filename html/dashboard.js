@@ -75,10 +75,13 @@
       jQuery("#out_gyro_x").html(msg.result.rollpitch.pitch);
       jQuery("#out_gyro_y").html(msg.result.rollpitch.roll);
 
+      var pitchCorrection = msg.result.corrections.pitch ? msg.result.corrections.pitch.sum : 0;
+      var rollCorrection = msg.result.corrections.roll ? msg.result.corrections.roll.sum : 0;
+
       datasetPitch.data.push([new Date().getTime(), msg.result.rollpitch.pitch]);
       datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
-      datasetPitch_C.data.push([new Date().getTime(), msg.result.corrections.pitch.sum]);
-      datasetRoll_C.data.push([new Date().getTime(), msg.result.corrections.roll.sum]);
+      datasetPitch_C.data.push([new Date().getTime(), pitchCorrection]);
+      datasetRoll_C.data.push([new Date().getTime(), rollCorrection]);
       $.plot($("#placeholder"), _dataset, options);
       //chart.data.datasets[0].data.push({x:new Date(), y:msg.result.rollpitch.pitch});
       //chart.update();
