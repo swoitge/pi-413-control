@@ -128,7 +128,7 @@
         .on("slide", function(value){
           thisCtx.updateMultiply(value);
         });
-      new Slider(this.$el.querySelector('[data-role="neutral"]'), {min : 500, max : 2000, value : this.servo.neutral})
+      new Slider(this.$el.querySelector('[data-role="neutral"]'), {min : -200, max : 200, value : this.servo.neutral})
         .on("slide", function(value){
           thisCtx.updateNeutral(value);
           //thisCtx.servo.neutral = value;
