@@ -99,7 +99,7 @@ function provideMethod(name, func) {
   }
 }
 
-provideMethod("readRollPitch", function(){
+provideMethod("readAllData", function(){
   if(gyro) {
     var gyro_xyz = gyro.get_gyro_xyz();
     var accel_xyz = gyro.get_accel_xyz();
@@ -107,7 +107,7 @@ provideMethod("readRollPitch", function(){
     var roll      = accel_xyz.x/16384.0 * -100;
     var pitch     = accel_xyz.y/16384.0 * -100;
 
-    var gyro_data = {
+    var allData = {
       gyro_xyz    : gyro_xyz,
       accel_xyz   : accel_xyz,
       rollpitch   : gyro.get_roll_pitch( gyro_xyz, accel_xyz ),
@@ -115,9 +115,9 @@ provideMethod("readRollPitch", function(){
       corrections : control.getLatestCorrections()
     }
 
-    console.log(gyro_data);
+    //console.log(gyro_data);
 
-    return gyro_data;
+    return allData;
   }
   else {
     return {
@@ -145,6 +145,10 @@ provideMethod("setServoValue", function(pin, value){
     //servo1.servoWrite(msgObj.value);
     rpio.pwmSetData(pin, value);
   }
+});
+
+provideMethod("setNeutral", function(id, value){
+  control.setNeutral(id, value);
 });
 
 provideMethod("setMultiply", function(id, value){

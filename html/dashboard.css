@@ -106,3 +106,7 @@ body {
 #slider-servo-1 .slider-selection {
 	background: #76b976;
 }
+
+.slider.slider-horizontal {
+  width: inherit;
+}

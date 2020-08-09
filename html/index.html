@@ -108,8 +108,12 @@
       <div id="app" class="row">
 
         <div class="col-md-12">
-          <button v-on:click="toggleState" type="button" class="btn btn-danger">{{message}}</button>
-          <button v-on:click="toggleRecord" type="button" class="btn btn-danger">{{recordStateMsg}}</button>
+          <button v-on:click="toggleState" type="button" class="btn btn-danger">
+            <i class="fa fa-stop" v-if="state"></i> Loop</button>
+          <button v-on:click="toggleRecord" type="button" class="btn btn-danger">
+            <i class="fa fa-stop" v-if="recordState"></i> Record</button>
+          <button v-on:click="togglePlot" type="button" class="btn btn-danger">
+            <i class="fa fa-stop" v-if="plotState"></i> Plot</button>
 
           <div class="form-group">
             <label>Interval</label>
@@ -117,7 +121,8 @@
               <input id="slider-interval" type="text" class="span2" value="" data-slider-handle="square" />
             </div>
           </div>
-      </div>
+        </div>
+
 
 
         <controller class="form"
@@ -149,42 +154,15 @@
                 </div>
               </div>
             </div>
+
+            <servo
+              v-for="servo in controller.servos"
+              v-bind:key="servo.id"
+              v-bind:servo="servo">
+            </servo>
+
           </div>
         </controller>
-
-        <servo class="form"
-          inline-template
-          v-for="servo in servos"
-          v-bind:servo="servo"
-          v-bind:key="servo.id">
-          <div class="col-md-6">
-            <div class="box box-default box-solid">
-              <div class="box-header">
-                <h3 class="box-title">{{servo.id}}</h3>
-              </div>
-              <div class="box-body">
-                <label>Controller</label>
-                <div style="width:100%">
-                  <select class="form-control" data-role="controller">
-                    <option id="pitch">Pitch</option>
-                    <option id="roll">Roll</option>
-                  </select>
-                </div>
-                <label>Manual</label>
-                <div style="width:100%">
-                  <input type="text" data-role="manual" class="span2" value="" data-slider-handle="square" />
-                </div>
-                <label>Multiply</label>
-                <div style="width:100%">
-                  <input type="text" data-role="multiply" class="span2" value="" data-slider-handle="square" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </servo>
-
-
-
 
       </div>
 
@@ -228,6 +206,28 @@
   </div>
 </div>
 
+<t-servo>
+  <div class="box box-default box-solid">
+    <div class="box-header">
+      <h3 class="box-title">{{servo.id}}</h3>
+    </div>
+    <div class="box-body">
+      <label>Neutral</label>
+      <div style="width:100%">
+        <input type="text" data-role="neutral" class="span2" value="" data-slider-handle="square" />
+      </div>
+      <label>Multiply</label>
+      <div style="width:100%">
+        <input type="text" data-role="multiply" class="span2" value="" data-slider-handle="square" />
+      </div>
+      <label>Manual</label>
+      <div style="width:100%">
+        <input type="text" data-role="manual" class="span2" value="" data-slider-handle="square" />
+      </div>
+    </div>
+  </div>
+</t-servo>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js" integrity="sha256-5oApc/wMda1ntIEK4qoWJ4YItnV4fBHMwywunj8gPqc=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js" integrity="sha256-LMe2LItsvOs1WDRhgNXulB8wFpq885Pib0bnrjETvfI=" crossorigin="anonymous"></script>
@@ -238,4 +238,5 @@
     <script src="app.js"></script></body>
     <script src="dashboard.js"></script></body>
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </html>

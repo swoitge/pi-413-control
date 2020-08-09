@@ -46,12 +46,6 @@ api.call = function() {
   socket.send(JSON.stringify(sendObj));
 }
 
-api.rpi.requestRollPitch = function(callback) {
-  var messageId = "msg_" + callbackCount++;
-  socket.send(JSON.stringify({messageId, msg:"readRollPitch"}));
-  callbacks[messageId] = callback;
-}
-
 var throttledSetPWM = _.throttle(function(v){
   console.log("on slideStop", arguments);
   api.rpi.setServoValue(12, v);

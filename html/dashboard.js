@@ -3,6 +3,8 @@
 
 (function () {
 
+  var intervalDiagramId;
+
   feather.replace();
 
   var datasetPitch    = {label: "PITCH",      data: [], color: "#3c8dbc" };
@@ -30,6 +32,7 @@
         el      : '#app',
         data    : {
           state           : false,
+          plotState       : false,
           message         : 'RUN',
           recordState     : false,
           recordStateMsg  : "START",
@@ -42,6 +45,15 @@
             .on("slide", throttledSetInterval);
         },
         methods : {
+          togglePlot:function(){
+            this.plotState = !this.plotState;
+            if(this.plotState) {
+              intervalDiagramId = setInterval(intervalDiagram, 1000);
+            }
+            else{
+              clearInterval(intervalDiagramId);
+            }
+          },
           toggleState: function () {
             this.state = !this.state;
             var thisCtx = this;
@@ -70,13 +82,12 @@
   }
 
 
-
-  setInterval(function(){
+  var intervalDiagram = function(){
     // temperature
     //api.call("readI2C", 0x41, function(msg){jQuery("#out_temp").html(msg.result);});
 
     // roll pitch
-    api.call("readRollPitch", function(msg){
+    api.call("readAllData", function(msg){
       jQuery("#out_gyro_x").html(msg.result.rollpitch.pitch);
       jQuery("#out_gyro_y").html(msg.result.rollpitch.roll);
 
@@ -97,9 +108,52 @@
     //api.rpi.requestI2C(0x45, function(msg){jQuery("#out_gyro_y").html(msg.result);});
     // gyro Z
     //api.rpi.requestI2C(0x47, function(msg){jQuery("#out_gyro_z").html(msg.result);});
-  }, 2000);
+  };
 
 
+  var templateStr = jQuery("t-servo").html();
+
+  Vue.component('servo', {
+    props : ["servo"],
+    mounted:function(){
+      var thisCtx = this;
+      new Slider(this.$el.querySelector('[data-role="manual"]'), {min : -90, max : 90, value : 0})
+        .on("slide", function(value){
+          thisCtx.setManual(value);
+        });
+      new Slider(this.$el.querySelector('[data-role="multiply"]'), {min : -2, max : 2, step:0.01, value : 1})
+        .on("slide", function(value){
+          thisCtx.updateMultiply(value);
+        });
+      new Slider(this.$el.querySelector('[data-role="neutral"]'), {min : 500, max : 2000, value : 1200})
+        .on("slide", function(value){
+          thisCtx.updateNeutral(value);
+        });
+    },
+    template:templateStr,
+    methods: {
+      setManual: function (value) {
+        var thisCtx = this;
+        api.call("setManual", thisCtx.servo.id, value, function(){
+          //thisCtx.message = thisCtx.state ? "STOP" : "START";
+        });
+      },
+      updateMultiply: function (value) {
+        var thisCtx = this;
+        thisCtx.multiply = value;
+        api.call("setMultiply", thisCtx.servo.id, value, function(){
+          //thisCtx.message = thisCtx.state ? "STOP" : "START";
+        });
+      },
+      updateNeutral: function (value) {
+        var thisCtx = this;
+        thisCtx.neutral = value;
+        api.call("setNeutral", thisCtx.servo.id, value, function(){
+          //thisCtx.message = thisCtx.state ? "STOP" : "START";
+        });
+      }
+    }
+  });
 
   Vue.component('controller', {
     props : ["controller"],
@@ -133,36 +187,6 @@
     }
   })
 
-  Vue.component('servo', {
-    props : ["servo"],
-    mounted:function(){
-      var thisCtx = this;
-      this.$el.querySelector('[data-role="controller"]').setAttribute("value", this.servo.controller);
-      new Slider(this.$el.querySelector('[data-role="manual"]'), {min : -90, max : 90, value : 0})
-        .on("slide", function(value){
-          thisCtx.setManual(value);
-        });
-      new Slider(this.$el.querySelector('[data-role="multiply"]'), {min : -2, max : 2, step:0.01, value : 1})
-        .on("slide", function(value){
-          thisCtx.updateMultiply(value);
-        });
-    },
-    methods: {
-      setManual: function (value) {
-        var thisCtx = this;
-        api.call("setManual", thisCtx.servo.id, value, function(){
-          //thisCtx.message = thisCtx.state ? "STOP" : "START";
-        });
-      },
-      updateMultiply: function (value) {
-        var thisCtx = this;
-        thisCtx.multiply = value;
-        api.call("setMultiply", thisCtx.servo.id, value, function(){
-          //thisCtx.message = thisCtx.state ? "STOP" : "START";
-        });
-      }
-    }
-  });
 
   // init plotly
   var x = [10, 4, 5];
