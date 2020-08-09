@@ -111,26 +111,29 @@
   };
 
 
-  var templateStr = jQuery("t-servo").html();
+  var templateStr = {};
+  templateStr.servo = jQuery("template[name='servo']").html();
+  templateStr.controller = jQuery("template[name='controller']").html();
 
   Vue.component('servo', {
-    props : ["servo"],
-    mounted:function(){
+    props     : ["servo"],
+    template  : templateStr.servo,
+    mounted   : function(){
       var thisCtx = this;
       new Slider(this.$el.querySelector('[data-role="manual"]'), {min : -90, max : 90, value : 0})
         .on("slide", function(value){
           thisCtx.setManual(value);
         });
-      new Slider(this.$el.querySelector('[data-role="multiply"]'), {min : -2, max : 2, step:0.01, value : 1})
+      new Slider(this.$el.querySelector('[data-role="multiply"]'), {min : -2, max : 2, step:0.01, value : this.servo.multiply})
         .on("slide", function(value){
           thisCtx.updateMultiply(value);
         });
-      new Slider(this.$el.querySelector('[data-role="neutral"]'), {min : 500, max : 2000, value : 1200})
+      new Slider(this.$el.querySelector('[data-role="neutral"]'), {min : 500, max : 2000, value : this.servo.neutral})
         .on("slide", function(value){
           thisCtx.updateNeutral(value);
+          //thisCtx.servo.neutral = value;
         });
     },
-    template:templateStr,
     methods: {
       setManual: function (value) {
         var thisCtx = this;
@@ -140,14 +143,14 @@
       },
       updateMultiply: function (value) {
         var thisCtx = this;
-        thisCtx.multiply = value;
+        thisCtx.servo.multiply = value;
         api.call("setMultiply", thisCtx.servo.id, value, function(){
           //thisCtx.message = thisCtx.state ? "STOP" : "START";
         });
       },
       updateNeutral: function (value) {
         var thisCtx = this;
-        thisCtx.neutral = value;
+        thisCtx.servo.neutral = value;
         api.call("setNeutral", thisCtx.servo.id, value, function(){
           //thisCtx.message = thisCtx.state ? "STOP" : "START";
         });
@@ -156,8 +159,9 @@
   });
 
   Vue.component('controller', {
-    props : ["controller"],
-    mounted:function(){
+    props     : ["controller"],
+    template  : templateStr.controller,
+    mounted   : function() {
       var thisCtx = this;
       new Slider(this.$el.querySelector('[data-role="target"]'), {min : -90, max : 90, value : this.controller.target})
         .on("slide", function(value){
@@ -173,6 +177,7 @@
     methods: {
       updateTarget: function (target) {
         var thisCtx = this;
+        thisCtx.controller.target = target;
         api.call("setTarget", thisCtx.controller.name, target, function(){
           //thisCtx.message = thisCtx.state ? "STOP" : "START";
         });

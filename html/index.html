@@ -123,45 +123,10 @@
           </div>
         </div>
 
-
-
-        <controller class="form"
-          inline-template
+        <controller
           v-for="controller in controllers"
           v-bind:controller="controller"
           v-bind:key="controller.name">
-          <div class="col-md-6">
-            <div class="box box-default box-solid">
-              <div class="box-header">
-                <h3 class="box-title">{{controller.name}}</h3>
-              </div>
-              <div class="box-body">
-                <label>Target</label>
-                <div style="width:100%">
-                  <input type="text" data-role="target" class="span2" value="" data-slider-handle="square" />
-                </div>
-                <label>PID - P</label>
-                <div style="width:100%">
-                  <input data-role="PID-P"  type="text" class="span2" value="" data-slider-handle="square" />
-                </div>
-                <label>PID - I</label>
-                <div style="width:100%">
-                  <input data-role="PID-I"  type="text" class="span2" value="" data-slider-handle="square" />
-                </div>
-                <label>PID - D</label>
-                <div style="width:100%">
-                  <input data-role="PID-D" type="text" class="span2" value="" data-slider-handle="square" />
-                </div>
-              </div>
-            </div>
-
-            <servo
-              v-for="servo in controller.servos"
-              v-bind:key="servo.id"
-              v-bind:servo="servo">
-            </servo>
-
-          </div>
         </controller>
 
       </div>
@@ -206,27 +171,62 @@
   </div>
 </div>
 
-<t-servo>
+<template name="controller">
+  <div class="col-md-6">
+    <div class="box box-default box-solid">
+      <div class="box-header">
+        <h3 class="box-title">{{controller.name}}</h3>
+      </div>
+      <div class="box-body">
+        <label>Target <b>{{controller.target}}</b></label>
+        <div style="width:100%">
+          <input type="text" data-role="target" class="span2" value="" data-slider-handle="square" />
+        </div>
+        <label>PID - P <b>{{controller.pid.P}}</b></label>
+        <div style="width:100%">
+          <input data-role="PID-P"  type="text" class="span2" value="" data-slider-handle="square" />
+        </div>
+        <label>PID - I <b>{{controller.pid.I}}</b></label>
+        <div style="width:100%">
+          <input data-role="PID-I"  type="text" class="span2" value="" data-slider-handle="square" />
+        </div>
+        <label>PID - D <b>{{controller.pid.D}}</b></label>
+        <div style="width:100%">
+          <input data-role="PID-D" type="text" class="span2" value="" data-slider-handle="square" />
+        </div>
+      </div>
+    </div>
+
+    <servo
+      v-for="servo in controller.servos"
+      v-bind:key="servo.id"
+      v-bind:servo="servo">
+    </servo>
+
+  </div>
+</template>
+
+<template name="servo">
   <div class="box box-default box-solid">
     <div class="box-header">
       <h3 class="box-title">{{servo.id}}</h3>
     </div>
     <div class="box-body">
-      <label>Neutral</label>
+      <label>Neutral <b>{{servo.neutral}}</b></label>
       <div style="width:100%">
         <input type="text" data-role="neutral" class="span2" value="" data-slider-handle="square" />
       </div>
-      <label>Multiply</label>
+      <label>Multiply <b>{{servo.multiply}}</b></label>
       <div style="width:100%">
         <input type="text" data-role="multiply" class="span2" value="" data-slider-handle="square" />
       </div>
-      <label>Manual</label>
+      <label>Manual <b>{{servo.manual}}</b></label>
       <div style="width:100%">
         <input type="text" data-role="manual" class="span2" value="" data-slider-handle="square" />
       </div>
     </div>
   </div>
-</t-servo>
+</template>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js" integrity="sha256-5oApc/wMda1ntIEK4qoWJ4YItnV4fBHMwywunj8gPqc=" crossorigin="anonymous"></script>
