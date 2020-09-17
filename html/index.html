@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.0.1">
-    <title>Dashboard Template · Bootstrap</title>
+    <title>Stabilized flight</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -46,7 +46,7 @@
   </head>
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Company name</a>
+  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Stabilized flight</a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -143,8 +143,8 @@
         </div>
       </div>
 
-      <div id="chart-pitch" style="width:600px;height:300px"></div>
-      <div id="chart-roll" style="width:600px;height:300px"></div>
+      <!--div id="chart-pitch" style="width:600px;height:300px"></div>
+      <div id="chart-roll" style="width:600px;height:300px"></div-->
 
       <h2>Section title</h2>
       <div class="table-responsive">
@@ -176,8 +176,13 @@
     <div class="box box-default box-solid">
       <div class="box-header">
         <h3 class="box-title">{{controller.name}}</h3>
+        <div class="box-tools pull-right">
+          <button type="button" v-on:click="toggleEditable" class="btn action-edit"><i class="fa fa-pencil"></i></button>
+          <button v-if="open" v-on:click="toggleOpen" type="button" class="btn action-close"><i class="fa fa-minus"></i></button>
+          <button v-else v-on:click="toggleOpen" type="button" class="btn action-open"><i class="fa fa-plus"></i></button>
+        </div>
       </div>
-      <div class="box-body">
+      <div class="box-body" v-show="open" v-bind:class="{ editable: editable }">
         <label>Target <b>{{controller.target}}</b></label>
         <div style="width:100%">
           <input type="text" data-role="target" class="span2" value="" data-slider-handle="square" />

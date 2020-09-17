@@ -10,7 +10,7 @@ var rpio, i2c;
 
 try {
   rpio = require('rpio');
-  //i2c = require('i2c-bus');
+  i2c = require('i2c-bus');
   //Gpio = require('pigpio').Gpio;
 }
 catch(e){
@@ -36,11 +36,12 @@ if(rpio) {
 }
 
 var gyro;
-if(mpuGyro) {
+if(i2c) {
   var address = 0x68; //MPU6050 address
   var bus = 1; //i2c bus used
   gyro = new mpuGyro(bus,MPU_ADDR);
 }
+
 // provide to module
 control.init(gyro, rpio);
 
@@ -100,33 +101,7 @@ function provideMethod(name, func) {
 }
 
 provideMethod("readAllData", function(){
-  if(gyro) {
-    var gyro_xyz = gyro.get_gyro_xyz();
-    var accel_xyz = gyro.get_accel_xyz();
-
-    var roll      = accel_xyz.x/16384.0 * -100;
-    var pitch     = accel_xyz.y/16384.0 * -100;
-
-    var allData = {
-      gyro_xyz    : gyro_xyz,
-      accel_xyz   : accel_xyz,
-      rollpitch   : gyro.get_roll_pitch( gyro_xyz, accel_xyz ),
-      rollpitch2  : {roll,pitch},
-      corrections : control.getLatestCorrections()
-    }
-
-    //console.log(gyro_data);
-
-    return allData;
-  }
-  else {
-    return {
-      gyro_xyz  : 0,
-      accel_xyz : 0,
-      rollpitch : {roll:12, pitch:24},
-      corrections:{pitch:{sum:0}, roll:{sum:0}}
-    }
-  }
+  return control.getCurrentValues();
 });
 
 provideMethod("getConfig", function(){

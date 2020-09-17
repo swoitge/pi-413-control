@@ -8,10 +8,13 @@
   feather.replace();
 
   var datasetPitch    = {label: "PITCH",      data: [], color: "#3c8dbc" };
-  var datasetRoll     = {label: "ROLL",       data: [], color: "#008d00" };
-  var datasetPitch_C  = {label: "COR Pitch",  data: [], color: "#3c8dff" };
-  var datasetRoll_C   = {label: "COR Roll",   data: [], color: "#008dff" };
-  var _dataset = [datasetPitch, datasetRoll, datasetPitch_C, datasetRoll_C];
+  var datasetRoll     = {label: "ROLL",       data: [], color: "#c50202" };
+  var datasetPitch_C  = {label: "COR Pitch",  data: [], color: "#98cff0" };
+  var datasetRoll_C   = {label: "COR Roll",   data: [], color: "#dd6262" };
+
+  var datasetAccel_X   = {label: "Accel X",   data: [], color: "#dddddd" };
+
+  var _dataset = [datasetPitch, datasetRoll, datasetPitch_C, datasetRoll_C, datasetAccel_X];
 
   var options = {
     series: {
@@ -88,17 +91,19 @@
 
     // roll pitch
     api.call("readAllData", function(msg){
-      jQuery("#out_gyro_x").html(msg.result.rollpitch.pitch);
-      jQuery("#out_gyro_y").html(msg.result.rollpitch.roll);
+      jQuery("#out_gyro_x").html(msg.result.gyroData.rollpitch.pitch);
+      jQuery("#out_gyro_y").html(msg.result.gyroData.rollpitch.roll);
 
-      var pitchCorrection = msg.result.corrections.pitch ? msg.result.corrections.pitch.sum : 0;
-      var rollCorrection = msg.result.corrections.roll ? msg.result.corrections.roll.sum : 0;
+      var pitchCorrection = msg.result.pitch ? msg.result.pitch.sum : 0;
+      var rollCorrection = msg.result.roll ? msg.result.roll.sum : 0;
 
-      datasetPitch.data.push([new Date().getTime(), msg.result.rollpitch.pitch]);
+      var now = new Date().getTime();
+      datasetPitch.data.push([now, msg.result.gyroData.rollpitch.pitch]);
       //datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
-      datasetPitch_C.data.push([new Date().getTime(), pitchCorrection]);
+      datasetPitch_C.data.push([now, pitchCorrection]);
+      datasetAccel_X.data.push([now, msg.result.gyroData.accel_xyz.x]);
       //datasetRoll_C.data.push([new Date().getTime(), rollCorrection]);
-      $.plot($("#chart-pitch"), _dataset, options);
+      //$.plot($("#chart-pitch"), _dataset, options);
       //chart.data.datasets[0].data.push({x:new Date(), y:msg.result.rollpitch.pitch});
       //chart.update();
     });
@@ -159,7 +164,7 @@
   });
 
   Vue.component('controller', {
-    props     : ["controller"],
+    props     : ["controller", "open", "editable"],
     template  : templateStr.controller,
     mounted   : function() {
       var thisCtx = this;
@@ -175,6 +180,14 @@
         .on("slide", function(value){thisCtx.updatePID("D", value);});
     },
     methods: {
+      toggleEditable: function () {
+        var thisCtx = this;
+        thisCtx.editable = !thisCtx.editable;
+      },
+      toggleOpen: function () {
+        var thisCtx = this;
+        thisCtx.open = !thisCtx.open;
+      },
       updateTarget: function (target) {
         var thisCtx = this;
         thisCtx.controller.target = target;

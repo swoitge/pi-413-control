@@ -109,3 +109,19 @@ body {
 .slider.slider-horizontal {
   width: inherit;
 }
+
+.box-body {
+  pointer-events: none;
+}
+
+.box-body label {
+  color: black;
+}
+
+.box-body.editable {
+  pointer-events: inherit;
+}
+
+.box-body.editable label {
+  color: #a0a0a0;
+}
