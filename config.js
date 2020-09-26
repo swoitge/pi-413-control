@@ -3,21 +3,21 @@
     "pitch": {
       "name": "pitch",
       "pid": {
-        "P": 0,
-        "I": 0.65,
+        "P": 0.76,
+        "I": 0,
         "D": 0,
         "DT": 1
       },
-      "target": 37,
+      "target": 19,
       "servos": [
         {
           "id": "servo1",
           "pin": 12,
-          "multiply": -0.4,
-          "neutral": -168
+          "multiply": 1,
+          "neutral": 12
         }
       ]
     }
   },
-  "interval": 473
+  "interval": 250
 }
