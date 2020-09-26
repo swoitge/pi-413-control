@@ -108,11 +108,11 @@ var charts = {
       var pitchCorrection = msg.result.pitch ? msg.result.pitch.sum : 0;
       var rollCorrection = msg.result.roll ? msg.result.roll.sum : 0;
 
-      var now = new Date().getTime();
+      var now = new Date();
 
       // update pitch
       var chartDef = charts.PITCH;
-      chartDef.data.addRow([now, msg.result.gyroData.rollpitch.pitch]);
+      chartDef.data.addRow([now, msg.result.gyroData.rollpitch.pitch, pitchCorrection]);
       chartDef.lineChart.draw(chartDef.data);
 
       //datasetPitch.data.push([now, msg.result.gyroData.rollpitch.pitch]);
@@ -231,12 +231,9 @@ var charts = {
       var chartDef = charts[key];
 
       chartDef.data = new google.visualization.DataTable();
-      chartDef.data.addColumn('number', 'X');
-      chartDef.data.addColumn('number', 'Pitch');
-
-      chartDef.data.addRow([2, 200]);
-      chartDef.data.addRow([3, 204]);
-      chartDef.data.addRow([4, 216]);
+      chartDef.data.addColumn('datetime', 'X');
+      chartDef.data.addColumn('number',   chartDef.title);
+      chartDef.data.addColumn('number',   chartDef.title + ' Corr.');
 
       var options = {
         title     :  chartDef.title,
