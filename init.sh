@@ -12,6 +12,12 @@ curl -o nodejs.tar.gz https://nodejs.org/dist/v9.9.0/node-v9.9.0-linux-armv6l.ta
 tar --skip-old-files -xzf nodejs.tar.gz
 sudo cp -r node-v9.9.0-linux-armv6l/* /usr/local/
 
+# install control software
+git clone https://github.com/swoitge/pi-413-control.git
+cd pi-413-control
+
+npm install rpio i2c-bus mpu6050-gyro
+
 # service
 sudo cat > /lib/systemd/system/glider.service << EOL
 [Unit]
@@ -38,8 +44,3 @@ sudo systemctl enable glider
 
 # start it immediately
 sudo systemctl start glider
-
-git clone https://github.com/swoitge/pi-413-control.git
-cd pi-413-control
-
-npm install rpio i2c-bus mpu6050-gyro -save
