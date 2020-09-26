@@ -9,7 +9,7 @@ sudo raspi-config nonint do_i2c 0
 # npm install
 cd /home/pi
 curl -o nodejs.tar.gz https://nodejs.org/dist/v9.9.0/node-v9.9.0-linux-armv6l.tar.gz
-tar -xzf nodejs.tar.gz
+tar --skip-old-files -xzf nodejs.tar.gz
 sudo cp -r node-v9.9.0-linux-armv6l/* /usr/local/
 
 # service
