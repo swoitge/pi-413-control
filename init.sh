@@ -13,7 +13,7 @@ tar --skip-old-files -xzf nodejs.tar.gz
 sudo cp -r node-v9.9.0-linux-armv6l/* /usr/local/
 
 # service
-cat > /lib/systemd/system/glider.service << EOL
+sudo cat > /lib/systemd/system/glider.service << EOL
 [Unit]
 Description=stabilized.js - stabilized gliding
 Documentation=https://github.com/swoitge/pi-413-control
