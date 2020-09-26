@@ -1,6 +1,17 @@
 'use strict';
 /* globals Chart:false, feather:false */
 
+var charts = {
+  PITCH : {
+    title : "Pitch",
+    data : null
+  },
+  ROLL : {
+    title : "Roll",
+    data : null
+  }
+};
+
 (function () {
 
   var intervalDiagramId;
@@ -98,10 +109,16 @@
       var rollCorrection = msg.result.roll ? msg.result.roll.sum : 0;
 
       var now = new Date().getTime();
-      datasetPitch.data.push([now, msg.result.gyroData.rollpitch.pitch]);
+
+      // update pitch
+      var chartDef = charts.PITCH;
+      chartDef.data.addRow([now, msg.result.gyroData.rollpitch.pitch]);
+      chartDef.lineChart.draw(chartDef.data);
+
+      //datasetPitch.data.push([now, msg.result.gyroData.rollpitch.pitch]);
       //datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
-      datasetPitch_C.data.push([now, pitchCorrection]);
-      datasetAccel_X.data.push([now, msg.result.gyroData.accel_xyz.x]);
+      //datasetPitch_C.data.push([now, pitchCorrection]);
+      //datasetAccel_X.data.push([now, msg.result.gyroData.accel_xyz.x]);
       //datasetRoll_C.data.push([new Date().getTime(), rollCorrection]);
       //$.plot($("#chart-pitch"), _dataset, options);
       //chart.data.datasets[0].data.push({x:new Date(), y:msg.result.rollpitch.pitch});
@@ -205,6 +222,38 @@
     }
   })
 
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawCharts);
+
+  function drawCharts() {
+
+    for(var key in charts) {
+      var chartDef = charts[key];
+
+      chartDef.data = new google.visualization.DataTable();
+      chartDef.data.addColumn('number', 'X');
+      chartDef.data.addColumn('number', 'Pitch');
+
+      chartDef.data.addRow([2, 200]);
+      chartDef.data.addRow([3, 204]);
+      chartDef.data.addRow([4, 216]);
+
+      var options = {
+        title     :  chartDef.title,
+        curveType : 'function',
+        legend    : { position: 'bottom' }
+      };
+
+      // create container
+      var div = document.createElement("DIV");                 // Create a <p> element
+      document.getElementById("charts-container").appendChild(div);
+
+      chartDef.lineChart = new google.visualization.LineChart(div);
+      chartDef.lineChart.draw(chartDef.data, options);
+    }
+
+
+  }
 
   // init plotly
   var x = [10, 4, 5];
