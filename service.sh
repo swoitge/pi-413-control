@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # service
-sudo cat > /lib/systemd/system/glider.service << EOL
+cat > /home/pi/glider.service << EOL
 [Unit]
 Description=stabilized.js - stabilized gliding
 Documentation=https://github.com/swoitge/pi-413-control
@@ -17,6 +17,9 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 EOL
+
+# copy service to proper location
+sudo cp /home/pi/glider.service /lib/systemd/system/
 
 # reload
 sudo systemctl daemon-reload
