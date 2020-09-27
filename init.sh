@@ -29,7 +29,8 @@ After=network.target
 Environment=NODE_PORT=8080
 Type=simple
 User=root
-ExecStart=/usr/bin/node /home/pi/pi-413-control/main.js
+WorkingDirectory=/home/pi/pi-413-control
+ExecStart=/usr/local/bin/node /home/pi/pi-413-control/main.js
 Restart=on-failure
 
 [Install]
