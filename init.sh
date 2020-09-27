@@ -19,7 +19,7 @@ cd pi-413-control
 npm install rpio i2c-bus mpu6050-gyro
 
 # service
-sudo cat > /lib/systemd/system/glider.service << EOL
+sudo cat > /home/pi/glider.service << EOL
 [Unit]
 Description=stabilized.js - stabilized gliding
 Documentation=https://github.com/swoitge/pi-413-control
@@ -28,13 +28,15 @@ After=network.target
 [Service]
 Environment=NODE_PORT=8080
 Type=simple
-User=pi
+User=root
 ExecStart=/usr/bin/node /home/pi/pi-413-control/main.js
 Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
 EOL
+
+sudo cp /home/pi/glider.service /lib/systemd/system/
 
 # reload
 sudo systemctl daemon-reload

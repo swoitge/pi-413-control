@@ -130,6 +130,14 @@ provideMethod("setMultiply", function(id, value){
   control.setMultiply(id, value);
 });
 
+provideMethod("setServoMin", function(id, value){
+  control.setServoMin(id, value);
+});
+
+provideMethod("setServoMax", function(id, value){
+  control.setServoMax(id, value);
+});
+
 provideMethod("setTarget", function(controller, value){
   console.log('set controller target value',controller, value);
   control.setTarget(controller, value);

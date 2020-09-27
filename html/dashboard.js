@@ -9,6 +9,10 @@ var charts = {
   ROLL : {
     title : "Roll",
     data : null
+  },
+  ACCEL : {
+    title : "Accelleration",
+    data : null
   }
 };
 
@@ -71,6 +75,7 @@ var charts = {
           toggleState: function () {
             this.state = !this.state;
             var thisCtx = this;
+            return;
             api.call("toggleControlLoop", this.state, function(){
               thisCtx.message = thisCtx.state ? "STOP" : "START";
             });
@@ -115,6 +120,11 @@ var charts = {
       chartDef.data.addRow([now, msg.result.gyroData.rollpitch.pitch, pitchCorrection]);
       chartDef.lineChart.draw(chartDef.data);
 
+      // update roll
+      chartDef = charts.ROLL;
+      chartDef.data.addRow([now, msg.result.gyroData.rollpitch.roll, rollCorrection]);
+      chartDef.lineChart.draw(chartDef.data);
+
       //datasetPitch.data.push([now, msg.result.gyroData.rollpitch.pitch]);
       //datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
       //datasetPitch_C.data.push([now, pitchCorrection]);
@@ -139,6 +149,7 @@ var charts = {
 
   Vue.component('servo', {
     props     : ["servo"],
+    data      : function(){return {open:false, editable:false}},
     template  : templateStr.servo,
     mounted   : function(){
       var thisCtx = this;
@@ -155,8 +166,24 @@ var charts = {
           thisCtx.updateNeutral(value);
           //thisCtx.servo.neutral = value;
         });
+      new Slider(this.$el.querySelector('[data-role="min"]'), {min : 80, max : 400, value : this.servo.min})
+        .on("slide", function(value){
+          thisCtx.updateMin(value);
+          //thisCtx.servo.neutral = value;
+        });
+      new Slider(this.$el.querySelector('[data-role="max"]'), {min : 80, max : 400, value : this.servo.max})
+        .on("slide", function(value){
+          thisCtx.updateMax(value);
+          //thisCtx.servo.neutral = value;
+        });
     },
     methods: {
+      toggleEditable: function () {
+        Vue.set(this, "editable", !editable.open);
+      },
+      toggleOpen: function () {
+        Vue.set(this, "open", !this.open);
+      },
       setManual: function (value) {
         var thisCtx = this;
         api.call("setManual", thisCtx.servo.id, value, function(){
@@ -176,12 +203,27 @@ var charts = {
         api.call("setNeutral", thisCtx.servo.id, value, function(){
           //thisCtx.message = thisCtx.state ? "STOP" : "START";
         });
+      },
+      updateMin: function (value) {
+        var thisCtx = this;
+        thisCtx.servo.min = value;
+        api.call("setServoMin", thisCtx.servo.id, value, function(){
+          //thisCtx.message = thisCtx.state ? "STOP" : "START";
+        });
+      },
+      updateMax: function (value) {
+        var thisCtx = this;
+        thisCtx.servo.max = value;
+        api.call("setServoMax", thisCtx.servo.id, value, function(){
+          //thisCtx.message = thisCtx.state ? "STOP" : "START";
+        });
       }
     }
   });
 
   Vue.component('controller', {
-    props     : ["controller", "open", "editable"],
+    props     : ["controller"],
+    data      : function(){return {open:false, editable:false}},
     template  : templateStr.controller,
     mounted   : function() {
       var thisCtx = this;
@@ -198,12 +240,10 @@ var charts = {
     },
     methods: {
       toggleEditable: function () {
-        var thisCtx = this;
-        thisCtx.editable = !thisCtx.editable;
+        Vue.set(this, "editable", !this.editable);
       },
       toggleOpen: function () {
-        var thisCtx = this;
-        thisCtx.open = !thisCtx.open;
+        Vue.set(this, "open", !this.open);
       },
       updateTarget: function (target) {
         var thisCtx = this;
