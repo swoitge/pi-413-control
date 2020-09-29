@@ -75,7 +75,6 @@ var charts = {
           toggleState: function () {
             this.state = !this.state;
             var thisCtx = this;
-            return;
             api.call("toggleControlLoop", this.state, function(){
               thisCtx.message = thisCtx.state ? "STOP" : "START";
             });
