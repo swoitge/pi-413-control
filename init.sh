@@ -13,6 +13,9 @@ tar --skip-old-files -xzf nodejs.tar.gz
 sudo cp -r node-v9.9.0-linux-armv6l/* /usr/local/
 
 # install control software
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+
 git clone https://github.com/swoitge/pi-413-control.git
 cd pi-413-control
 
