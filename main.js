@@ -34,16 +34,16 @@ if(rpio) {
   rpio.pwmSetRange(12, range);
 
   // signal complete startup
-  setTimeout(()=>{rpio.pwmSetData(12, 180);}), 0000);
-  setTimeout(()=>{rpio.pwmSetData(12, 220);}), 0500);
-  setTimeout(()=>{rpio.pwmSetData(12, 200);}), 1500);
+  setTimeout(()=>{rpio.pwmSetData(12, 180);}, 0000);
+  setTimeout(()=>{rpio.pwmSetData(12, 220);}, 0500);
+  setTimeout(()=>{rpio.pwmSetData(12, 200);}, 1500);
 
   // pin35
   rpio.open(35, rpio.PWM);
   rpio.pwmSetRange(35, range);
-  setTimeout(()=>{rpio.pwmSetData(35, 180);}), 2000);
-  setTimeout(()=>{rpio.pwmSetData(35, 220);}), 2500);
-  setTimeout(()=>{rpio.pwmSetData(35, 200);}), 3000);
+  setTimeout(()=>{rpio.pwmSetData(35, 180);}, 2000);
+  setTimeout(()=>{rpio.pwmSetData(35, 220);}, 2500);
+  setTimeout(()=>{rpio.pwmSetData(35, 200);}, 3000);
 }
 
 var gyro;
