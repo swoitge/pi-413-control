@@ -8,13 +8,15 @@
         "D": 0,
         "DT": 1
       },
-      "target": 19,
+      "target": 7,
       "servos": [
         {
           "id": "servo1",
           "pin": 12,
           "multiply": 1,
-          "neutral": 12
+          "neutral": -7,
+          "min": 108,
+          "max": 366
         }
       ]
     }

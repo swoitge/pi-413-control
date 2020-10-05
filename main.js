@@ -17,22 +17,33 @@ catch(e){
   console.error(e);
 }
 
-var pin = 12;           /* P12/GPIO18 */
+//var pin = 12;           /* P12/GPIO18 */
 var range = 1024;       /* LEDs can quickly hit max brightness, so only use */
 var max = 131072;          /*   the bottom 8th of a larger scale */
 var clockdiv = 128;       /* Clock divider (PWM refresh rate), 8 == 2.4MHz */
-var interval = 5;       /* setInterval timer, speed of pulses */
-var times = 5;          /* How many times to pulse before exiting */
 
 //MPU https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Register-Map1.pdf
 const MPU_ADDR = 0x68;
 const W_REG_TEMP = 0x41;
 
 if(rpio) {
-  rpio.open(pin, rpio.PWM);
   rpio.pwmSetClockDivider(clockdiv);
-  rpio.pwmSetRange(pin, range);
-  rpio.pwmSetData(pin, 80);
+
+  // pin12
+  rpio.open(12, rpio.PWM);
+  rpio.pwmSetRange(12, range);
+
+  // signal complete startup
+  setTimeout(()=>{rpio.pwmSetData(12, 180);}), 0000);
+  setTimeout(()=>{rpio.pwmSetData(12, 220);}), 0500);
+  setTimeout(()=>{rpio.pwmSetData(12, 200);}), 1500);
+
+  // pin35
+  rpio.open(35, rpio.PWM);
+  rpio.pwmSetRange(35, range);
+  setTimeout(()=>{rpio.pwmSetData(35, 180);}), 2000);
+  setTimeout(()=>{rpio.pwmSetData(35, 220);}), 2500);
+  setTimeout(()=>{rpio.pwmSetData(35, 200);}), 3000);
 }
 
 var gyro;
