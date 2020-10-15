@@ -19,7 +19,7 @@ git config --global user.name "Your Name"
 git clone https://github.com/swoitge/pi-413-control.git
 cd pi-413-control
 
-npm install rpio i2c-bus mpu6050-gyro
+npm install rpio i2c-bus
 
 # service
 sudo cat > /home/pi/glider.service << EOL
