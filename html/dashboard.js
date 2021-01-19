@@ -116,12 +116,12 @@ var charts = {
 
       // update pitch
       var chartDef = charts.PITCH;
-      chartDef.data.addRow([now, msg.result.gyroData.rollpitch.pitch, pitchCorrection]);
+      chartDef.data.addRow([now, msg.result.gyroData.rotation.x, pitchCorrection]);
       chartDef.lineChart.draw(chartDef.data);
 
       // update roll
       chartDef = charts.ROLL;
-      chartDef.data.addRow([now, msg.result.gyroData.rollpitch.roll, rollCorrection]);
+      chartDef.data.addRow([now, msg.result.gyroData.rotation.y, rollCorrection]);
       chartDef.lineChart.draw(chartDef.data);
 
       //datasetPitch.data.push([now, msg.result.gyroData.rollpitch.pitch]);
