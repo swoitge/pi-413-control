@@ -27,9 +27,11 @@ var charts = {
   var datasetPitch_C  = {label: "COR Pitch",  data: [], color: "#98cff0" };
   var datasetRoll_C   = {label: "COR Roll",   data: [], color: "#dd6262" };
 
-  var datasetAccel_X   = {label: "Accel X",   data: [], color: "#dddddd" };
+  var datasetAccel_X   = {label: "Accel X",   data: [], color: "#00dddd" };
+  var datasetAccel_Y   = {label: "Accel Y",   data: [], color: "#dd00dd" };
+  var datasetAccel_Z   = {label: "Accel Z",   data: [], color: "#dddd00" };
 
-  var _dataset = [datasetPitch, datasetRoll, datasetPitch_C, datasetRoll_C, datasetAccel_X];
+  var _dataset = [datasetPitch, datasetRoll, datasetPitch_C, datasetRoll_C, datasetAccel_X, datasetAccel_Y, datasetAccel_Z];
 
   var options = {
     series: {
@@ -124,6 +126,11 @@ var charts = {
       chartDef.data.addRow([now, msg.result.gyroData.rotation.x, rollCorrection]);
       chartDef.lineChart.draw(chartDef.data);
 
+      // update access
+      chartDef = charts.ACCEL;
+      chartDef.data.addRow([now, msg.result.gyroData.accel.x, msg.result.gyroData.accel.y, msg.result.gyroData.accel.z]);
+      chartDef.lineChart.draw(chartDef.data);
+
       //datasetPitch.data.push([now, msg.result.gyroData.rollpitch.pitch]);
       //datasetRoll.data.push([new Date().getTime(), msg.result.rollpitch.roll]);
       //datasetPitch_C.data.push([now, pitchCorrection]);
@@ -132,6 +139,31 @@ var charts = {
       //$.plot($("#chart-pitch"), _dataset, options);
       //chart.data.datasets[0].data.push({x:new Date(), y:msg.result.rollpitch.pitch});
       //chart.update();
+
+
+      x.push(msg.result.position.x);
+      y.push(msg.result.position.y);
+      z.push(msg.result.position.z);
+
+      Plotly.react('plotly', [{
+        type: 'scatter3d',
+        mode: 'lines+markers',
+        x: x,
+        y: y,
+        z: z,
+        line: {
+          width: 6,
+          /*color: c,*/
+          colorscale: "Viridis"},
+          marker: {
+            size: 3.5,
+            /*color: c,*/
+            colorscale: "Greens",
+            cmin: -20,
+            cmax: 50
+          }},
+        ]);
+
     });
 
     //api.rpi.requestI2C(0x43, function(msg){jQuery("#out_gyro_x").html(msg.result);});
