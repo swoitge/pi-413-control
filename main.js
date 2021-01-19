@@ -3,15 +3,18 @@ const http = require('http');
 const WebSocket = require('ws');
 //const mpu     = require("./lib/mpu-access.js");
 const control = require("./lib/control-loop.js");
-const mpuGyro = require("./lib/gyro-mpu6050.js");
+//const mpuGyro = require("./lib/gyro-mpu6050.js");
+//const mpuGyro = require("./lib/gyro-mpu6050.js");
+
 
 // raspberry only libs
 var rpio, i2c;
+const MPU6050;
 
 try {
   rpio = require('rpio');
   i2c = require('i2c-bus');
-  //Gpio = require('pigpio').Gpio;
+  gyro = require('i2c-mpu6050');
 }
 catch(e){
   console.error(e);
@@ -23,7 +26,7 @@ var max = 131072;          /*   the bottom 8th of a larger scale */
 var clockdiv = 128;       /* Clock divider (PWM refresh rate), 8 == 2.4MHz */
 
 //MPU https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Register-Map1.pdf
-const MPU_ADDR = 0x68;
+const MPU_6050_ADDR = 0x68;
 const W_REG_TEMP = 0x41;
 
 if(rpio) {
@@ -46,20 +49,25 @@ if(rpio) {
   setTimeout(()=>{rpio.pwmSetData(35, 200);}, 3000);
 }
 
+var i2cInst;
 var gyro;
 if(i2c) {
-  var address = 0x68; //MPU6050 address
   var bus = 1; //i2c bus used
-  gyro = new mpuGyro(bus,MPU_ADDR);
+  const i2c1 = i2c.openSync(1);
+  const sensor = new MPU6050(i2c1, MPU_6050_ADDR);
+  //const data = sensor.readSync();
+  //i2c1.closeSync();
 }
 
 // provide to module
-control.init(gyro, rpio);
+control.init(sensor, rpio);
 
-var i2cInst;
 
 if(i2c) {
-  i2cInst = i2c.openSync(1);
+
+
+
+
   var rawData_h = i2cInst.readByteSync(MPU_ADDR, W_REG_TEMP);
   var rawData_l = i2cInst.readByteSync(MPU_ADDR, W_REG_TEMP+1);
   console.log("rawData_h", rawData_h);
