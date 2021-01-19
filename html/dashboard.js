@@ -106,8 +106,8 @@ var charts = {
 
     // roll pitch
     api.call("readAllData", function(msg){
-      jQuery("#out_gyro_x").html(msg.result.gyroData.rollpitch.pitch);
-      jQuery("#out_gyro_y").html(msg.result.gyroData.rollpitch.roll);
+      jQuery("#out_gyro_x").html(msg.result.gyroData.rotation.x);
+      jQuery("#out_gyro_y").html(msg.result.gyroData.rotation.y);
 
       var pitchCorrection = msg.result.pitch ? msg.result.pitch.sum : 0;
       var rollCorrection = msg.result.roll ? msg.result.roll.sum : 0;
