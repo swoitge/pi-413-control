@@ -1,20 +1,15 @@
 const fs = require('fs');
 const http = require('http');
 const WebSocket = require('ws');
-//const mpu     = require("./lib/mpu-access.js");
+const sensor = require("./lib/sensor.js");
 const control = require("./lib/control-loop.js");
-//const mpuGyro = require("./lib/gyro-mpu6050.js");
-//const mpuGyro = require("./lib/gyro-mpu6050.js");
 
 
 // raspberry only libs
-var rpio, i2c;
-const MPU6050;
+var rpio;
 
 try {
   rpio = require('rpio');
-  i2c = require('i2c-bus');
-  gyro = require('i2c-mpu6050');
 }
 catch(e){
   console.error(e);
@@ -26,8 +21,7 @@ var max = 131072;          /*   the bottom 8th of a larger scale */
 var clockdiv = 128;       /* Clock divider (PWM refresh rate), 8 == 2.4MHz */
 
 //MPU https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Register-Map1.pdf
-const MPU_6050_ADDR = 0x68;
-const W_REG_TEMP = 0x41;
+
 
 if(rpio) {
   rpio.pwmSetClockDivider(clockdiv);
@@ -49,35 +43,9 @@ if(rpio) {
   setTimeout(()=>{rpio.pwmSetData(35, 200);}, 3000);
 }
 
-var i2cInst;
-var gyro;
-if(i2c) {
-  var bus = 1; //i2c bus used
-  const i2c1 = i2c.openSync(1);
-  const sensor = new MPU6050(i2c1, MPU_6050_ADDR);
-  //const data = sensor.readSync();
-  //i2c1.closeSync();
-}
-
 // provide to module
 control.init(sensor, rpio);
 
-
-if(i2c) {
-
-
-
-
-  var rawData_h = i2cInst.readByteSync(MPU_ADDR, W_REG_TEMP);
-  var rawData_l = i2cInst.readByteSync(MPU_ADDR, W_REG_TEMP+1);
-  console.log("rawData_h", rawData_h);
-  console.log("rawData_l", rawData_l);
-  var rawData = (rawData_h << 8) + rawData_l;
-
-  //Temperature in degrees C = (TEMP_OUT Register Value as a signed quantity)/340 + 36.53
-  var celsius = rawData / 340 + 36.53;
-  console.log("current temperature", celsius);
-}
 
 const baseDir = "./html/";
 
