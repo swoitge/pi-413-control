@@ -4,15 +4,18 @@
 var charts = {
   PITCH : {
     title : "Pitch",
-    data : null
+    data : null,
+    columns : [{type:'datetime', def:'X'}, {type:'number', def:'Pitch'}, {type:'number', def:'Pitch Corr.'}],
   },
   ROLL : {
     title : "Roll",
-    data : null
+    data : null,
+    columns : [{type:'datetime', def:'X'}, {type:'number', def:'Pitch'}, {type:'number', def:'Pitch Corr.'}],
   },
   ACCEL : {
     title : "Accelleration",
-    data : null
+    data : null,
+    columns : [{type:'datetime', def:'X'}, {type:'number', def:'X'}, {type:'number', def:'Y'}, {type:'number', def:'Z'}],
   }
 };
 
@@ -30,8 +33,6 @@ var charts = {
   var datasetAccel_X   = {label: "Accel X",   data: [], color: "#00dddd" };
   var datasetAccel_Y   = {label: "Accel Y",   data: [], color: "#dd00dd" };
   var datasetAccel_Z   = {label: "Accel Z",   data: [], color: "#dddd00" };
-
-  var _dataset = [datasetPitch, datasetRoll, datasetPitch_C, datasetRoll_C, datasetAccel_X, datasetAccel_Y, datasetAccel_Z];
 
   var options = {
     series: {
@@ -302,9 +303,9 @@ var charts = {
       var chartDef = charts[key];
 
       chartDef.data = new google.visualization.DataTable();
-      chartDef.data.addColumn('datetime', 'X');
-      chartDef.data.addColumn('number',   chartDef.title);
-      chartDef.data.addColumn('number',   chartDef.title + ' Corr.');
+      _.each(chartDef.columns, function(column){
+        chartDef.data.addColumn(column.type, column.def);
+      });
 
       var options = {
         title     :  chartDef.title,
