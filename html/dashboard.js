@@ -10,17 +10,17 @@ var charts = {
   ROLL : {
     title : "Roll",
     data : null,
-    columns : [{type:'datetime', def:'X'}, {type:'number', def:'Pitch'}, {type:'number', def:'Pitch Corr.'}],
+    columns : [{type:'datetime', def:'X'}, {type:'number', def:'Roll'}, {type:'number', def:'Roll Corr.'}],
   },
   ACCEL : {
     title : "Accelleration",
     data : null,
-    columns : [{type:'datetime', def:'X'}, {type:'number', def:'X'}, {type:'number', def:'Y'}, {type:'number', def:'Z'}],
+    columns : [{type:'datetime', def:'X'}, {type:'number', def:'ACCEL X'}, {type:'number', def:'ACCEL Y'}, {type:'number', def:'ACCEL Z'}],
   },
   GYRO : {
     title : "Gyro",
     data : null,
-    columns : [{type:'datetime', def:'X'}, {type:'number', def:'X'}, {type:'number', def:'Y'}, {type:'number', def:'Z'}],
+    columns : [{type:'datetime', def:'X'}, {type:'number', def:'GYRO X'}, {type:'number', def:'GYRO Y'}, {type:'number', def:'GYRO Z'}],
   }
 };
 
