@@ -24,6 +24,9 @@ var charts = {
   }
 };
 
+var intervalDiagramMS = 1000;
+var diagramMaxRows = 1000;
+
 (function () {
 
   var intervalDiagramId;
@@ -74,7 +77,7 @@ var charts = {
           togglePlot:function(){
             this.plotState = !this.plotState;
             if(this.plotState) {
-              intervalDiagramId = setInterval(intervalDiagram, 1000);
+              intervalDiagramId = setInterval(intervalDiagram, intervalDiagramMS);
             }
             else{
               clearInterval(intervalDiagramId);
@@ -125,21 +128,25 @@ var charts = {
       // update pitch
       var chartDef = charts.PITCH;
       chartDef.data.addRow([now, msg.result.gyroData.rotation.y, pitchCorrection]);
+      if(chartDef.data.getNumberOfRows() > diagramMaxRows) chartDef.data.removeRow(0);
       chartDef.lineChart.draw(chartDef.data);
 
       // update roll
       chartDef = charts.ROLL;
       chartDef.data.addRow([now, msg.result.gyroData.rotation.x, rollCorrection]);
+      if(chartDef.data.getNumberOfRows() > diagramMaxRows) chartDef.data.removeRow(0);
       chartDef.lineChart.draw(chartDef.data);
 
       // update access
       chartDef = charts.ACCEL;
       chartDef.data.addRow([now, msg.result.gyroData.accel.x, msg.result.gyroData.accel.y, msg.result.gyroData.accel.z]);
+      if(chartDef.data.getNumberOfRows() > diagramMaxRows) chartDef.data.removeRow(0);
       chartDef.lineChart.draw(chartDef.data);
 
       // update gyro
       chartDef = charts.GYRO;
       chartDef.data.addRow([now, msg.result.gyroData.gyro.x, msg.result.gyroData.gyro.y, msg.result.gyroData.gyro.z]);
+      if(chartDef.data.getNumberOfRows() > diagramMaxRows) chartDef.data.removeRow(0);
       chartDef.lineChart.draw(chartDef.data);
 
       //datasetPitch.data.push([now, msg.result.gyroData.rollpitch.pitch]);
