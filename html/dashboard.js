@@ -16,6 +16,11 @@ var charts = {
     title : "Accelleration",
     data : null,
     columns : [{type:'datetime', def:'X'}, {type:'number', def:'X'}, {type:'number', def:'Y'}, {type:'number', def:'Z'}],
+  },
+  GYRO : {
+    title : "Gyro",
+    data : null,
+    columns : [{type:'datetime', def:'X'}, {type:'number', def:'X'}, {type:'number', def:'Y'}, {type:'number', def:'Z'}],
   }
 };
 
@@ -130,6 +135,11 @@ var charts = {
       // update access
       chartDef = charts.ACCEL;
       chartDef.data.addRow([now, msg.result.gyroData.accel.x, msg.result.gyroData.accel.y, msg.result.gyroData.accel.z]);
+      chartDef.lineChart.draw(chartDef.data);
+
+      // update gyro
+      chartDef = charts.GYRO;
+      chartDef.data.addRow([now, msg.result.gyroData.gyro.x, msg.result.gyroData.gyro.y, msg.result.gyroData.gyro.z]);
       chartDef.lineChart.draw(chartDef.data);
 
       //datasetPitch.data.push([now, msg.result.gyroData.rollpitch.pitch]);
