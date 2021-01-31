@@ -1,0 +1,42 @@
+<template name="controller">
+  <div class="col-md-6">
+    <div class="box box-default box-solid">
+      <div class="box-header">
+        <h3 class="box-title">{{controller.name}}</h3>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn toggle-editable"><i class="fa fa-pencil"></i></button>
+          <button type="button" class="btn toggle-open">
+            {{#if openState}}
+              <i class="fa fa-minus"></i>
+            {{else}}
+              <i class="fa fa-plus"></i>
+            {{/if}}
+          </button>
+        </div>
+      </div>
+      <div class="box-body controller {{#unless openState}}hidden{{/unless}} {{#if editable}}editable{{/if}}">
+        <label>Target <b>{{target}}</b></label>
+        <div style="width:100%">
+          <input type="text" data-role="target" class="span2" value="" data-slider-handle="square" />
+        </div>
+        <label>PID - P <b>{{pid.P}}</b></label>
+        <div style="width:100%">
+          <input data-role="PID-P"  type="text" class="span2" value="" data-slider-handle="square" />
+        </div>
+        <label>PID - I <b>{{pid.I}}</b></label>
+        <div style="width:100%">
+          <input data-role="PID-I"  type="text" class="span2" value="" data-slider-handle="square" />
+        </div>
+        <label>PID - D <b>{{pid.D}}</b></label>
+        <div style="width:100%">
+          <input data-role="PID-D" type="text" class="span2" value="" data-slider-handle="square" />
+        </div>
+      </div>
+    </div>
+
+    {{#each servo in servos}}
+      {{>servo data=servo}}
+    {{/each}}
+
+  </div>
+</template>

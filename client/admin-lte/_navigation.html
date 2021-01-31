@@ -1,0 +1,26 @@
+<template name="_navigation">
+
+  <div class="user-panel">
+    <div class="pull-left image">
+      <img src="/images/avatar.jpg" class="img-circle" alt="User Image">
+    </div>
+    <div class="pull-left info">
+      <p style="margin-top:0">{{currentUser.username}}</p>
+    </div>
+  </div>
+
+  <ul class="sidebar-menu">
+    <li class="{{isDashboard}}">
+      <a href="/">
+        <i class="fa fa-dashboard"></i>
+        <span>Startseite</span>
+      </a>
+    </li>
+    <li class="">
+      <a href="/diagrams">
+        <i class="fa fa-cubes"></i>
+        <span>Diagrams</span>
+      </a>
+    </li>
+  </ul>
+</template>

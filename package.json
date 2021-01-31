@@ -1,26 +1,24 @@
 {
   "name": "pi-413-control",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "dependencies": {
-    "lpf": "^1.0.0",
-    "node-pid-controller": "^1.0.1",
-    "underscore": "^1.10.2",
-    "ws": "^7.3.0"
-  },
-  "devDependencies": {},
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "meteor run",
+    "test": "meteor test --once --driver-package meteortesting:mocha",
+    "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
+    "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/swoitge/pi-413-control.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/swoitge/pi-413-control/issues"
-  },
-  "homepage": "https://github.com/swoitge/pi-413-control#readme"
+  "dependencies": {
+    "@babel/runtime": "^7.10.4",
+    "aws-sdk": "^2.45.0",
+    "big-decimal": "^1.0.2",
+    "byline": "^5.0.0",
+    "carbone": "^1.1.0",
+    "chart.js": "^2.9.3",
+    "googleapis": "^39.2.0",
+    "ical": "^0.5.0",
+    "json2yaml": "1.1.0",
+    "kubernetes-client": "^4.0.0",
+    "meteor-node-stubs": "0.4.1",
+    "request": "^2.81.0"
+  }
 }

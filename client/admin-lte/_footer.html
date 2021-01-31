@@ -1,0 +1,15 @@
+<template name="_footer">
+  <footer class="main-footer">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <div class="version-info pull-right">
+            Version {{buildVersion.build}} ({{buildVersion.revision}})
+          </div>
+        </div>
+      </div>
+  </footer>
+  <style>
+    body.sidebar-open footer.main-footer div.version-info { padding-right:240px; }
+    body.sidebar-collapse footer.main-footer div.version-info { padding-right:0px; }
+  </style>
+</template>

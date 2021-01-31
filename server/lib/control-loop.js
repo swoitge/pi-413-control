@@ -287,6 +287,12 @@ var getConfig = function() {
   return globalConfig;
 }
 
+var getState = function() {
+  return {
+    running:controlLoopRunning
+  };
+}
+
 var updateConfig = _.throttle(function() {
   return fs.writeFileSync(CFG_PATH, JSON.stringify(globalConfig, null, 2), {encoding:"utf-8"});
 }, 1000);
@@ -352,9 +358,14 @@ var stopRecord = function() {
   return currentRecord;
 }
 
+var setAvgMode = function(enabled, intervalMs) {
+  sensor.setAvgMode(enabled, intervalMs);
+}
+
 module.exports = {
   toggleControlLoop,
   getConfig,
+  getState,
   init,
   setLoopInterval,
   setTarget,
@@ -365,4 +376,5 @@ module.exports = {
   setNeutral,
   startRecord,
   stopRecord,
-  getCurrentValues};
+  getCurrentValues,
+  setAvgMode};

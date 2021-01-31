@@ -1,0 +1,42 @@
+<template name="dashboard">
+  <section class="content dashboard" >
+    <div class="row">
+
+      <div class="col-md-12">
+        <div class="box box-default box-solid">
+          <div class="box-header">
+            <h3 class="box-title">Control-Loop</h3>
+            <div class="box-tools pull-right">
+            </div>
+          </div>
+          <div class="box-body control-loop">
+            
+            <button type="button" class="btn btn-danger toggle-state">
+              {{#if state.running}}
+                <i class="fa fa-stop"></i>
+              {{else}}
+                <i class="fa fa-play"></i>
+              {{/if}} Loop
+            </button>
+            <button type="button" class="btn btn-danger toggle-record">
+              <i class="fa fa-stop" v-if="recordState"></i> Record</button>
+            <button type="button" class="btn btn-danger toggle-plot">
+              <i class="fa fa-stop" v-if="plotState"></i> Plot</button>
+
+            <div class="form-group">
+              <label>Interval</label>
+              <div style="width:100%">
+                <input id="slider-interval" type="text" class="span2" value="" data-slider-handle="square" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{#each c in controllers}}
+        {{>controller controller=c}}
+      {{/each}}
+
+    </div>
+  </section>
+</template>

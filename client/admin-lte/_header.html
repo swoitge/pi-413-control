@@ -1,0 +1,21 @@
+<template name="_header">
+  <header class="main-header">
+		<a href="/" class="logo">
+			<span class="logo-mini"><b>JP</b></span>
+			<span class="logo-lg" style="line-height:25px;">
+        <b>Stab</b>
+      </span>
+		</a>
+	  <nav class="navbar navbar-static-top" role="navigation">
+			<a class="sidebar-toggle" data-toggle="offcanvas" role="button">
+	    	<span class="sr-only">Navigation umschalten</span>
+			</a>
+
+	    <div>
+				<div class="pull-right" style="margin:6px">
+					<a href="{{ pathFor 'atSignOut' }}" data-action="logout" class="btn btn-warning">Abmelden</a>
+				</div>
+			</div>
+		</nav>
+	</header>
+</template>
