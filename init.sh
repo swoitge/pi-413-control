@@ -6,11 +6,18 @@ sudo apt-get update && sudo apt-get install -y git
 # enable i2c module.
 sudo raspi-config nonint do_i2c 0
 
-# npm install
+# node install - unofficial
 cd /home/pi
-curl -o nodejs.tar.gz https://nodejs.org/dist/v9.9.0/node-v9.9.0-linux-armv6l.tar.gz
-tar --skip-old-files -xzf nodejs.tar.gz
-sudo cp -r node-v9.9.0-linux-armv6l/* /usr/local/
+NODE_VERSION=v12.18.3
+wget https://unofficial-builds.nodejs.org/download/release/${NODE_VERSION}/node-${NODE_VERSION}-linux-armv6l.tar.gz
+tar -xzf node-${NODE_VERSION}-linux-armv6l.tar.gz
+cd node-${NODE_VERSION}-linux-armv6l
+sudo cp -R * /usr/local
+
+#official node arm6 v9
+#curl -o nodejs.tar.gz https://nodejs.org/dist/v9.9.0/node-v9.9.0-linux-armv6l.tar.gz
+#tar --skip-old-files -xzf nodejs.tar.gz
+#sudo cp -r node-v9.9.0-linux-armv6l/* /usr/local/
 
 # install control software
 git config --global user.email "you@example.com"
