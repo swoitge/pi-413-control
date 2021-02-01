@@ -4,10 +4,10 @@ cd /home/pi/meteor
 
 echo "start downloading $1"
 
-curl --user "$1" https://jenkins.yakaranda.com/job/live-view/lastSuccessfulBuild/artifact/_build/live-view.tar.gz --output live-view.tar.gz
+curl --user "$1" https://jenkins.yakaranda.com/job/glider/lastSuccessfulBuild/artifact/pi-413-control/_build/pi-413-control.tar.gz --output pi-413-control.tar.gz
 
 # extract
-tar -xzf live-view.tar.gz
+tar -xzf pi-413-control.tar.gz
 
 # build fibers
 cd /home/pi/meteor/bundle/programs/server/node_modules/fibers
