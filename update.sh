@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir /home/pi/meteor
+
 cd /home/pi/meteor
 
 echo "start downloading $1"
