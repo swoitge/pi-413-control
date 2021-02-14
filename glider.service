@@ -1,0 +1,17 @@
+[Unit]
+Description=stabilized.js - stabilized gliding
+Documentation=https://github.com/swoitge/pi-413-control
+After=network.target
+
+[Service]
+Environment=PORT=8080
+Environment=ROOT_URL=http://localhost:8080
+Environment=MONGO_URL=mongodb+srv://
+Type=simple
+User=root
+WorkingDirectory=/home/pi/meteor/bundle
+ExecStart=/usr/local/bin/node /home/pi/meteor/bundle/main.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
