@@ -1,6 +1,6 @@
 const fs = require('fs');
 const http = require('http');
-
+const {spawn} = Npm.require('child_process');
 const sensor = require("./lib/sensor.js");
 const control = require("./lib/control-loop.js");
 
@@ -53,6 +53,9 @@ control.init(sensor, rpio);
 
 
 Meteor.methods({
+  "triggerShutDown" : function(){
+    spawn("sh", ["-c", "sudo shutdown now"]);
+  },
   "readAllData" : function(){
     return control.getCurrentValues();
   },

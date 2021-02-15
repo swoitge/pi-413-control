@@ -41,6 +41,9 @@ Template.dashboard.onRendered(function(){
 });
 
 Template.dashboard.events({
+  "click .shutdown": function (event, template) {
+    Meteor.call("triggerShutDown");
+  },
   "click .toggle-state": function (event, template) {
     var state = template.state.get();
     state.running = !state.running;
