@@ -10,7 +10,7 @@
             </div>
           </div>
           <div class="box-body control-loop">
-            
+
             <button type="button" class="btn btn-danger toggle-state">
               {{#if state.running}}
                 <i class="fa fa-stop"></i>
@@ -24,7 +24,7 @@
               <i class="fa fa-stop" v-if="plotState"></i> Plot</button>
 
             <div class="form-group">
-              <label>Interval</label>
+              <label>Interval <b>{{intervalMS}}</b></label>
               <div style="width:100%">
                 <input id="slider-interval" type="text" class="span2" value="" data-slider-handle="square" />
               </div>

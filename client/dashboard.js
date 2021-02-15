@@ -5,11 +5,13 @@ Template.dashboard.onCreated(function(){
   this.servos = new ReactiveVar({});
 
   api.templates.utils.createAccessibleVar(this, "state", {});
+  api.templates.utils.createAccessibleVar(this, "intervalMS", {});
 
   var template = this;
 
   Meteor.call("getConfig", function(erer,result){
     template.controllers.set(result.controllers);
+    template.intervalMS.set(result.interval);
     template.servos.set(result.servos);
   });
 
@@ -26,11 +28,16 @@ Template.dashboard.helpers({
 
 
 Template.dashboard.onRendered(function(){
+  var template = this;
+  var throttledWriteConfig = _.throttle(function(v){
+    //console.log("on slideStop", arguments);
+    Meteor.call("setLoopInterval", v);
+  });
   new Slider(this.find('#slider-interval'), {min : 0, max : 500, step:1, value : 100})
-    .on("slide", _.throttle(function(v){
-      //console.log("on slideStop", arguments);
-      Meteor.call("setLoopInterval", v);
-    }, 1000));
+    .on("slide", function(v){
+      template.intervalMS.set(v);
+      throttledWriteConfig(v);
+    }, 1000);
 });
 
 Template.dashboard.events({

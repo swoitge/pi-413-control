@@ -9,14 +9,14 @@
 
         <div class="btn-group">
           {{#if state}}
-          <label>Running</label>
+            <button type="button" class="btn btn-default">Running</button>
             <button type="button" class="btn btn-danger toggle-plot">
               <i class="fa fa-stop"></i> Stop
             </button>
           {{else}}
-            <label>Stopped</label>
+            <button type="button" class="btn btn-disabled" disabled>Stopped</button>
             <button type="button" class="btn btn-danger toggle-plot">
-              <i class="fa fa-play"></i> Stop
+              <i class="fa fa-play"></i> Run
             </button>
           {{/if}}
         </div>
