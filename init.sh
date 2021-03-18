@@ -14,6 +14,12 @@ tar -xzf node-${NODE_VERSION}-linux-armv6l.tar.gz
 cd node-${NODE_VERSION}-linux-armv6l
 sudo cp -R * /usr/local
 
+# enable shutdown without password
+sudo cat > /etc/sudoers.d/pi-extension << EOL
+# pi user can shutdown and reboot
+pi ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown
+EOL
+
 #official node arm6 v9
 #curl -o nodejs.tar.gz https://nodejs.org/dist/v9.9.0/node-v9.9.0-linux-armv6l.tar.gz
 #tar --skip-old-files -xzf nodejs.tar.gz
