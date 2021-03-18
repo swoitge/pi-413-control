@@ -1,4 +1,5 @@
 
+var intervalDiagramId;
 var intervalDiagramMS = 1000;
 var diagramMaxRows = 1000;
 const charts = {
@@ -37,68 +38,6 @@ Template.diagrams.onCreated(function(){
 
 
 Template.diagrams.onRendered(function(){
-  var intervalDiagram = function(){
-    // temperature
-    //api.call("readI2C", 0x41, function(msg){jQuery("#out_temp").html(msg.result);});
-
-    // roll pitch
-    Meteor.call("readAllData", function(err, msg){
-      //jQuery("#out_gyro_x").html(msg.result.gyroData.rotation.x);
-      //jQuery("#out_gyro_y").html(msg.result.gyroData.rotation.y);
-
-      var pitchCorrection = msg.result.pitch ? msg.result.pitch.sum : 0;
-      var rollCorrection = msg.result.roll ? msg.result.roll.sum : 0;
-
-      var now = new Date();
-
-      // update pitch
-      var chartDef = charts.PITCH;
-      chartDef.data.addRow([now, msg.result.gyroData.rotation.y, pitchCorrection]);
-      if(chartDef.data.getNumberOfRows() > diagramMaxRows) chartDef.data.removeRow(0);
-      chartDef.lineChart.draw(chartDef.data);
-
-      // update roll
-      chartDef = charts.ROLL;
-      chartDef.data.addRow([now, msg.result.gyroData.rotation.x, rollCorrection]);
-      if(chartDef.data.getNumberOfRows() > diagramMaxRows) chartDef.data.removeRow(0);
-      chartDef.lineChart.draw(chartDef.data);
-
-      // update access
-      chartDef = charts.ACCEL;
-      chartDef.data.addRow([now, msg.result.gyroData.accel.x, msg.result.gyroData.accel.y, msg.result.gyroData.accel.z]);
-      if(chartDef.data.getNumberOfRows() > diagramMaxRows) chartDef.data.removeRow(0);
-      chartDef.lineChart.draw(chartDef.data);
-
-      // update gyro
-      chartDef = charts.GYRO;
-      chartDef.data.addRow([now, msg.result.gyroData.gyro.x, msg.result.gyroData.gyro.y, msg.result.gyroData.gyro.z]);
-      if(chartDef.data.getNumberOfRows() > diagramMaxRows) chartDef.data.removeRow(0);
-      chartDef.lineChart.draw(chartDef.data);
-
-      x.push(msg.result.position.x);
-      y.push(msg.result.position.y);
-      z.push(msg.result.position.z);
-
-      /*Plotly.react('plotly', [{
-        type: 'scatter3d',
-        mode: 'lines+markers',
-        x: x,
-        y: y,
-        z: z,
-        line: {
-          width: 6,
-          colorscale: "Viridis"},
-          marker: {
-            size: 3.5,
-            colorscale: "Greens",
-            cmin: -20,
-            cmax: 50
-          }},
-        ]);*/
-    });
-  };
-
-
   function drawCharts() {
 
     for(var key in charts) {
@@ -143,6 +82,67 @@ Template.diagrams.events({
     }
   }
 });
+
+var intervalDiagram = function(){
+  // temperature
+  //api.call("readI2C", 0x41, function(msg){jQuery("#out_temp").html(msg.result);});
+
+  // roll pitch
+  Meteor.call("readAllData", function(err, msg){
+    //jQuery("#out_gyro_x").html(msg.result.gyroData.rotation.x);
+    //jQuery("#out_gyro_y").html(msg.result.gyroData.rotation.y);
+
+    var pitchCorrection = msg.pitch ? msg.pitch.sum : 0;
+    var rollCorrection = msg.roll ? msg.roll.sum : 0;
+
+    var now = new Date();
+
+    // update pitch
+    var chartDef = charts.PITCH;
+    chartDef.data.addRow([now, msg.gyroData.rotation.y, pitchCorrection]);
+    if(chartDef.data.getNumberOfRows() > diagramMaxRows) chartDef.data.removeRow(0);
+    chartDef.lineChart.draw(chartDef.data);
+
+    // update roll
+    chartDef = charts.ROLL;
+    chartDef.data.addRow([now, msg.gyroData.rotation.x, rollCorrection]);
+    if(chartDef.data.getNumberOfRows() > diagramMaxRows) chartDef.data.removeRow(0);
+    chartDef.lineChart.draw(chartDef.data);
+
+    // update access
+    chartDef = charts.ACCEL;
+    chartDef.data.addRow([now, msg.gyroData.accel.x, msg.gyroData.accel.y, msg.gyroData.accel.z]);
+    if(chartDef.data.getNumberOfRows() > diagramMaxRows) chartDef.data.removeRow(0);
+    chartDef.lineChart.draw(chartDef.data);
+
+    // update gyro
+    chartDef = charts.GYRO;
+    chartDef.data.addRow([now, msg.gyroData.gyro.x, msg.gyroData.gyro.y, msg.gyroData.gyro.z]);
+    if(chartDef.data.getNumberOfRows() > diagramMaxRows) chartDef.data.removeRow(0);
+    chartDef.lineChart.draw(chartDef.data);
+
+    //x.push(msg.position.x);
+    //y.push(msg.position.y);
+    //z.push(msg.position.z);
+
+    /*Plotly.react('plotly', [{
+      type: 'scatter3d',
+      mode: 'lines+markers',
+      x: x,
+      y: y,
+      z: z,
+      line: {
+        width: 6,
+        colorscale: "Viridis"},
+        marker: {
+          size: 3.5,
+          colorscale: "Greens",
+          cmin: -20,
+          cmax: 50
+        }},
+      ]);*/
+  });
+};
 
 /*
 (function () {

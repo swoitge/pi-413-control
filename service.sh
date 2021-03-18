@@ -8,10 +8,13 @@ Documentation=https://github.com/swoitge/pi-413-control
 After=network.target
 
 [Service]
-Environment=NODE_PORT=8080
+Environment=PORT=8080
+Environment=ROOT_URL=http://localhost:8080
+Environment=MONGO_URL="${1}"
 Type=simple
-User=pi
-ExecStart=/usr/bin/node /home/pi/pi-413-control/main.js
+User=root
+WorkingDirectory=/home/pi/meteor/bundle
+ExecStart=/usr/local/bin/node /home/pi/meteor/bundle/main.js
 Restart=on-failure
 
 [Install]
