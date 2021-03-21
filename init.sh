@@ -3,6 +3,9 @@
 # install git
 sudo apt-get update && sudo apt-get install -y git
 
+# install pipe viewer
+sudo apt-get install -y pv
+
 # enable i2c module.
 sudo raspi-config nonint do_i2c 0
 

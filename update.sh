@@ -12,8 +12,9 @@ curl --user "$1" https://jenkins.yakaranda.com/job/glider/lastSuccessfulBuild/ar
 # stop service
 sudo systemctl stop glider
 
-# extract
-tar -xzf pi-413-control.tar.gz
+# extract with pv
+pv pi-413-control.tar.gz | tar -xz
+#tar -xzf pi-413-control.tar.gz
 
 # build fibers
 cd /home/pi/meteor/bundle/programs/server/node_modules/fibers
