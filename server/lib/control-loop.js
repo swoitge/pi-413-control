@@ -273,8 +273,8 @@ var toggleControlLoop = function(enabled) {
           pwm = Math.max(SRV_MIN, pwm);
 
           console.log("setting servo:" + servo.pin, input, multiplyed, pwm);
-          if(servos[servi.id]) {
-            servos[servi.id].servoWrite(pwm);
+          if(servos[servo.id]) {
+            servos[servo.id].servoWrite(pwm);
           }
         }
       }
