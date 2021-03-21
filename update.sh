@@ -21,7 +21,7 @@ node ./build
 
 # add pigpio
 cd /home/pi/meteor/bundle/programs/server
-npm install rpio i2c-bus i2c-mpu6050
+npm install pigpio i2c-bus i2c-mpu6050
 
 
 # start service
