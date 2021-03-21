@@ -1,4 +1,4 @@
-const Gpio = require('pigpio').Gpio;
+/*const Gpio = require('pigpio').Gpio;
 
 const motor = new Gpio(15, {mode: Gpio.OUTPUT});
 
@@ -15,3 +15,4 @@ setInterval(() => {
     increment = 100;
   }
 }, 1000);
+*/
