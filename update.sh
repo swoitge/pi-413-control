@@ -6,8 +6,8 @@ cd /home/pi/meteor
 
 echo "start downloading $1"
 
-curl --user "$1" https://jenkins.yakaranda.com/job/glider/lastSuccessfulBuild/artifact/pi-413-control/_build/pi-413-control.tar.gz --output pi-413-control.tar.gz
-
+#curl --user "$1" https://jenkins.yakaranda.com/job/glider/lastSuccessfulBuild/artifact/pi-413-control/_build/pi-413-control.tar.gz --output pi-413-control.tar.gz
+wget --auth-no-challenge --user=$1 --password=$2 https://jenkins.yakaranda.com/job/glider/lastSuccessfulBuild/artifact/pi-413-control/_build/pi-413-control.tar.gz -O pi-413-control.tar.gz
 
 # stop service
 sudo systemctl stop glider
