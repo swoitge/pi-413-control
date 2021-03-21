@@ -4,8 +4,8 @@ const pidController = require('./pid-controller.js');
 const positionIP    = require('./position.js');
 
 const CFG_PATH = "./config.js";
-const SRV_MIN = 80;
-const SRV_MAX = 400;
+const SRV_MIN = 1000;
+const SRV_MAX = 2000;
 
 var currentValues = {
   pitch     : NaN,
@@ -25,11 +25,11 @@ var globalConfig = {
       target  : 0,
       servos  : [{
         id        : "servo1",
-        pin       : 12,
+        pin       : 15,
         min       : SRV_MIN,
         max       : SRV_MAX,
         multiply  : 1,
-        neutral   : 100}]
+        neutral   : 1500}]
     },
     roll : {
       name    : "roll",
@@ -37,11 +37,11 @@ var globalConfig = {
       target  : 0,
       servos  : [{
         id        : "servo2",
-        pin       : 35,
+        pin       : 18,
         min       : SRV_MIN,
         max       : SRV_MAX,
         multiply  : 1,
-        neutral   : 100}]
+        neutral   : 1500}]
     }
     //{pin : 13, axis:"roll",  pid:{P:0.5, I:0.1, D:0.1, DT:1}, target:0}
   },
@@ -52,11 +52,16 @@ var globalConfig = {
 var pidControllers = {};
 
 var sensor = null;                                      // set with init method
-var rpio = null;                                      // set with init method
+var servos = {};                                      // set with init method
 
-var init = function(sensorInst, rpioInst) {
+var init = function(sensorInst, Gpio) {
   sensor = sensorInst;
-  rpio = rpioInst;
+
+  if(Gpio) {
+    servos.servo1 = new Gpio(15, {mode: Gpio.OUTPUT});
+    servos.servo2 = new Gpio(18, {mode: Gpio.OUTPUT});
+  }
+
 
   if(fs.existsSync(CFG_PATH)) {
     var json = fs.readFileSync(CFG_PATH, {encoding:"utf-8"});
@@ -268,8 +273,8 @@ var toggleControlLoop = function(enabled) {
           pwm = Math.max(SRV_MIN, pwm);
 
           console.log("setting servo:" + servo.pin, input, multiplyed, pwm);
-          if(rpio) {
-            rpio.pwmSetData(servo.pin, pwm);
+          if(Gpio) {
+            servos[servi.id].servoWrite(pwm);
           }
         }
       }

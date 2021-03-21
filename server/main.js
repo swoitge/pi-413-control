@@ -11,10 +11,10 @@ api.records      = {collection:coll};
 api.newsletter   = {subscriptions:{collection:coll}};
 
 // raspberry only libs
-var rpio;
+var Gpio;
 
 try {
-  rpio = require('rpio');
+  Gpio = require('pigpio').Gpio;
 }
 catch(e){
   console.error(e);
@@ -28,28 +28,28 @@ var clockdiv = 128;       /* Clock divider (PWM refresh rate), 8 == 2.4MHz */
 //MPU https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Register-Map1.pdf
 
 
-if(rpio) {
-  rpio.pwmSetClockDivider(clockdiv);
+if(Gpio) {
+  //rpio.pwmSetClockDivider(clockdiv);
 
   // pin12
-  rpio.open(12, rpio.PWM);
-  rpio.pwmSetRange(12, range);
+  //rpio.open(12, rpio.PWM);
+  //rpio.pwmSetRange(12, range);
 
   // signal complete startup
-  setTimeout(()=>{rpio.pwmSetData(12, 180);}, 0000);
-  setTimeout(()=>{rpio.pwmSetData(12, 220);}, 0500);
-  setTimeout(()=>{rpio.pwmSetData(12, 200);}, 1500);
+  //setTimeout(()=>{rpio.pwmSetData(12, 180);}, 0000);
+  //setTimeout(()=>{rpio.pwmSetData(12, 220);}, 0500);
+  //setTimeout(()=>{rpio.pwmSetData(12, 200);}, 1500);
 
   // pin35
-  rpio.open(35, rpio.PWM);
-  rpio.pwmSetRange(35, range);
-  setTimeout(()=>{rpio.pwmSetData(35, 180);}, 2000);
-  setTimeout(()=>{rpio.pwmSetData(35, 220);}, 2500);
-  setTimeout(()=>{rpio.pwmSetData(35, 200);}, 3000);
+  //rpio.open(35, rpio.PWM);
+  //rpio.pwmSetRange(35, range);
+  //setTimeout(()=>{rpio.pwmSetData(35, 180);}, 2000);
+  //setTimeout(()=>{rpio.pwmSetData(35, 220);}, 2500);
+  //setTimeout(()=>{rpio.pwmSetData(35, 200);}, 3000);
 }
 
 // provide to module
-control.init(sensor, rpio);
+control.init(sensor, Gpio);
 
 
 Meteor.methods({
