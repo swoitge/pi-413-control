@@ -3,29 +3,34 @@
     <div class="box-header">
       <h3 class="box-title">{{servo.id}}</h3>
       <div class="box-tools pull-right">
-        <button type="button" v-on:click="toggleEditable" class="btn action-edit"><i class="fa fa-pencil"></i></button>
-        <button v-if="open" v-on:click="toggleOpen" type="button" class="btn action-close"><i class="fa fa-minus"></i></button>
-        <button v-else v-on:click="toggleOpen" type="button" class="btn action-open"><i class="fa fa-plus"></i></button>
+        <button type="button" class="btn servo toggle-editable"><i class="fa fa-pencil"></i></button>
+        <button type="button" class="btn servo toggle-open">
+          {{#if openState}}
+            <i class="fa fa-minus"></i>
+          {{else}}
+            <i class="fa fa-plus"></i>
+          {{/if}}
+        </button>
       </div>
     </div>
-    <div class="box-body" v-show="open" v-bind:class="{ editable: editable }">
-      <label>Neutral <b>{{servo.neutral}}</b></label>
-      <div style="width:100%">
-        <input type="text" data-role="neutral" class="span2" value="" data-slider-handle="square" />
-      </div>
-      <label>Multiply <b>{{servo.multiply}}</b></label>
+    <div class="box-body servo {{#unless openState}}hidden{{/unless}} {{#if editable}}editable{{/if}}">
+      <label>Multiply <b>{{multiply}}</b></label>
       <div style="width:100%">
         <input type="text" data-role="multiply" class="span2" value="" data-slider-handle="square" />
       </div>
-      <label>Min <b>{{servo.min}}</b></label>
+      <label>Neutral <b>{{neutral}}</b></label>
+      <div style="width:100%">
+        <input type="text" data-role="neutral" class="span2" value="" data-slider-handle="square" />
+      </div>
+      <label>Min <b>{{min}}</b></label>
       <div style="width:100%">
         <input type="text" data-role="min" class="span2" value="" data-slider-handle="square" />
       </div>
-      <label>Max <b>{{servo.max}}</b></label>
+      <label>Max <b>{{max}}</b></label>
       <div style="width:100%">
         <input type="text" data-role="max" class="span2" value="" data-slider-handle="square" />
       </div>
-      <label>Manual <b>{{servo.manual}}</b></label>
+      <label>Manual <b>{{manual}}</b></label>
       <div style="width:100%">
         <input type="text" data-role="manual" class="span2" value="" data-slider-handle="square" />
       </div>

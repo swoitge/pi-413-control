@@ -1,68 +1,55 @@
+Template.servo.onCreated(function(){
+  console.log("on created servo template");
+
+  api.templates.utils.createAccessibleVar(this, "openState", false);
+  api.templates.utils.createAccessibleVar(this, "editable", false);
+
+  api.templates.utils.createAccessibleVar(this, "multiply", this.data.servo.multiply);
+  api.templates.utils.createAccessibleVar(this, "neutral", this.data.servo.neutral);
+  api.templates.utils.createAccessibleVar(this, "min", this.data.servo.min);
+  api.templates.utils.createAccessibleVar(this, "max", this.data.servo.max);
+  api.templates.utils.createAccessibleVar(this, "manual", 0);
+});
+
 Template.servo.onRendered(function(){
-  new Slider(this.$el.querySelector('[data-role="manual"]'), {min : -90, max : 90, value : 0})
+
+  var template = this;
+  template.throttledUpdate = _.throttle(function(method, value){
+    console.log("throttled update");
+    Meteor.call(method, template.data.servo.id, value);
+  }, 1000);
+
+  new Slider(this.find('[data-role="manual"]'), {min : -90, max : 90, value : 0})
     .on("slide", function(value){
-      thisCtx.setManual(value);
+      template.manual.set(value);
     });
-  new Slider(this.$el.querySelector('[data-role="multiply"]'), {min : -2, max : 2, step:0.01, value : this.servo.multiply})
+  new Slider(this.find('[data-role="multiply"]'), {min : -0, max : 20, step:0.1, value : this.data.servo.multiply})
     .on("slide", function(value){
-      thisCtx.updateMultiply(value);
+      template.multiply.set(value);
+      template.throttledUpdate("setMultiply", value);
     });
-  new Slider(this.$el.querySelector('[data-role="neutral"]'), {min : -200, max : 200, value : this.servo.neutral})
+  new Slider(this.find('[data-role="neutral"]'), {min : 1000, max : 2000, value : this.data.servo.neutral})
     .on("slide", function(value){
-      thisCtx.updateNeutral(value);
+      template.neutral.set(value);
       //thisCtx.servo.neutral = value;
     });
-  new Slider(this.$el.querySelector('[data-role="min"]'), {min : 80, max : 400, value : this.servo.min})
+  new Slider(this.find('[data-role="min"]'), {min : 500, max : 2500, value : this.data.servo.min})
     .on("slide", function(value){
-      thisCtx.updateMin(value);
+      template.min.set(value);
       //thisCtx.servo.neutral = value;
     });
-  new Slider(this.$el.querySelector('[data-role="max"]'), {min : 80, max : 400, value : this.servo.max})
+  new Slider(this.find('[data-role="max"]'), {min : 500, max : 2500, value : this.data.servo.max})
     .on("slide", function(value){
-      thisCtx.updateMax(value);
+      template.max.set(value);
       //thisCtx.servo.neutral = value;
     });
 })
 
 Template.servo.events({
-  "click .toggle-editable": function () {
-    Vue.set(this, "editable", !editable.open);
+  "click .servo.toggle-editable": function (event, template) {
+    template.editable.set(!template.editable.get());
   },
-  "clic .toggle-open": function () {
-    Vue.set(this, "open", !this.open);
-  },
-  "click .set-manual": function (value) {
-    var thisCtx = this;
-    api.call("setManual", thisCtx.servo.id, value, function(){
-      //thisCtx.message = thisCtx.state ? "STOP" : "START";
-    });
-  },
-  "click .update-multiply": function (value) {
-    var thisCtx = this;
-    thisCtx.servo.multiply = value;
-    api.call("setMultiply", thisCtx.servo.id, value, function(){
-      //thisCtx.message = thisCtx.state ? "STOP" : "START";
-    });
-  },
-  "click .update-neutral": function (value) {
-    var thisCtx = this;
-    thisCtx.servo.neutral = value;
-    api.call("setNeutral", thisCtx.servo.id, value, function(){
-      //thisCtx.message = thisCtx.state ? "STOP" : "START";
-    });
-  },
-  "click .update-min": function (value) {
-    var thisCtx = this;
-    thisCtx.servo.min = value;
-    api.call("setServoMin", thisCtx.servo.id, value, function(){
-      //thisCtx.message = thisCtx.state ? "STOP" : "START";
-    });
-  },
-  "click .update-max": function (value) {
-    var thisCtx = this;
-    thisCtx.servo.max = value;
-    api.call("setServoMax", thisCtx.servo.id, value, function(){
-      //thisCtx.message = thisCtx.state ? "STOP" : "START";
-    });
+  "click .servo.toggle-open": function (event, template) {
+    template.openState.set(!template.openState.get());
   }
 });

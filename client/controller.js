@@ -4,6 +4,7 @@ Template.controller.onCreated(function(){
   api.templates.utils.createAccessibleVar(this, "editable", false);
   api.templates.utils.createAccessibleVar(this, "target", this.data.controller.target);
   api.templates.utils.createAccessibleVar(this, "pid", this.data.controller.pid);
+  //api.templates.utils.createAccessibleVar(this, "servos", this.data.controller.servos);
 
   var template = this;
 
@@ -36,11 +37,11 @@ Template.controller.onRendered(function(){
 })
 
 Template.controller.events({
-  "click .toggle-editable": function (event, template) {
+  "click .controller.toggle-editable": function (event, template) {
     var editable = template.editable.get();
     template.editable.set(!editable);
   },
-  "click .toggle-open": function (event, template) {
+  "click .controller.toggle-open": function (event, template) {
     var openState = template.openState.get();
     template.openState.set(!openState);
   },

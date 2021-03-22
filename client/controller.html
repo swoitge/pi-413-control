@@ -4,8 +4,8 @@
       <div class="box-header">
         <h3 class="box-title">{{controller.name}}</h3>
         <div class="box-tools pull-right">
-          <button type="button" class="btn toggle-editable"><i class="fa fa-pencil"></i></button>
-          <button type="button" class="btn toggle-open">
+          <button type="button" class="btn toggle-editable controller"><i class="fa fa-pencil"></i></button>
+          <button type="button" class="btn toggle-open controller">
             {{#if openState}}
               <i class="fa fa-minus"></i>
             {{else}}
@@ -34,8 +34,8 @@
       </div>
     </div>
 
-    {{#each servo in servos}}
-      {{>servo data=servo}}
+    {{#each s in controller.servos}}
+      {{>servo servo=s}}
     {{/each}}
 
   </div>
